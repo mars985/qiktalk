@@ -4,6 +4,9 @@ import { io } from "socket.io-client";
 
 import HomePage from "./pages/homepage";
 import LoginPage from "./pages/loginpage";
+import { Route, Routes } from "react-router-dom";
+import ProtectedRoute from "./components/ui/protectedroute";
+import SignupPage from "./pages/signuppage";
 
 export default function App() {
   useEffect(() => {
@@ -20,7 +23,20 @@ export default function App() {
 
   return (
     <>
-      {true? <HomePage></HomePage>:<LoginPage></LoginPage>}
+      {/* {false? <HomePage></HomePage>:<LoginPage></LoginPage>} */}
+
+      <Routes>
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/signup" element={<SignupPage />} />
+        <Route
+          path="/"
+          element={
+            <ProtectedRoute>
+              <HomePage />
+            </ProtectedRoute>
+          }
+        />
+      </Routes>
     </>
   );
 }
