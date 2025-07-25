@@ -11,23 +11,28 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const navigate = useNavigate();
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault(); // prevent page reload
 
     try {
       const response = await axios.post(
         "http://localhost:3000/login",
-        { email, password },
+        {
+          email,
+          password,
+        },
         { withCredentials: true }
       );
 
       console.log("Login success:", response.data);
-      // navigate("/dashboard") or similar
+      navigate("/");
     } catch (err) {
       console.error("Login failed:", err);
     }
@@ -49,7 +54,7 @@ const LoginPage = () => {
           <CardDescription>
             Enter your email below to login to your account
           </CardDescription>
-          <CardAction onClick={() => window.location.href = "/signup"}>
+          <CardAction onClick={() => (window.location.href = "/signup")}>
             <Button variant="link">Sign Up</Button>
           </CardAction>
         </CardHeader>
