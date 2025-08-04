@@ -1,14 +1,23 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../axios";
 
-const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    axios.get("http://localhost:3000/verify", { withCredentials: true }) // your backend auth check
-      .then(() => setLoading(false))
+    api
+      .get("/verify")
+      .then((res) => {
+        if (res.data.verified) {
+          setLoading(false);
+        } else {
+          navigate("/login");
+        }
+      })
       .catch(() => navigate("/login"));
   }, [navigate]);
 

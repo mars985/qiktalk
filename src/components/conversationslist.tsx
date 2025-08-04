@@ -8,7 +8,7 @@ const ConversationsList: React.FC = () => {
   if (error) return <div>Error: {error}</div>;
 
   return (
-    <div className="p-4 space-y-4">
+    <div className="p-4 space-y-4 text-white">
       <h2 className="text-xl font-semibold">Conversations</h2>
       {conversations.length === 0 ? (
         <div>No conversations found.</div>
