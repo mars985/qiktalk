@@ -1,5 +1,5 @@
 import React from "react";
-import type { Message } from "../../types/message";
+import type { Message } from "../types/message";
 
 const MessageTile: React.FC<{ message: Message; isOwn: boolean }> = ({
   message,
@@ -22,9 +22,9 @@ const MessageTile: React.FC<{ message: Message; isOwn: boolean }> = ({
     {isOwn ? (
       <span style={{ fontSize: 12, color: "#555" }}>You</span>
     ) : (
-      <span style={{ fontSize: 14, color: "#555" }}>{message.senderId}</span>
+      <span style={{ fontSize: 14, color: "#555" }}>{message.sender}</span>
     )}
-    <span style={{ fontSize: 16 }}>{message.content}</span>
+    <span style={{ fontSize: 16 }}>{message.body}</span>
   </div>
 );
 

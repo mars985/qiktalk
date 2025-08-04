@@ -7,6 +7,7 @@ import LoginPage from "./pages/loginpage";
 import { Route, Routes } from "react-router-dom";
 import ProtectedRoute from "./components/ui/protectedroute";
 import SignupPage from "./pages/signuppage";
+import { ThemeProvider } from "./components/providers/theme-provider";
 
 export default function App() {
   useEffect(() => {
@@ -22,9 +23,7 @@ export default function App() {
   }, []);
 
   return (
-    <>
-      {/* {false? <HomePage></HomePage>:<LoginPage></LoginPage>} */}
-
+    <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
       <Routes>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
@@ -37,6 +36,6 @@ export default function App() {
           }
         />
       </Routes>
-    </>
+    </ThemeProvider>
   );
 }

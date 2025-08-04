@@ -26,7 +26,7 @@ const Messages: React.FC<MessagesProps> = ({ messages }) => {
         className="messages-list h-[80vh] overflow-y-auto px-4 mt-4 flex flex-col-reverse gap-2"
       >
         {[...messages].reverse().map((message) => {
-          const isOwn = message.senderId === thisUser;
+          const isOwn = message.sender === thisUser;
           return (
             <div
               key={message.id}
@@ -42,7 +42,7 @@ const Messages: React.FC<MessagesProps> = ({ messages }) => {
           </div>
         )}
       </div>
-      <MessageBox/>
+      <MessageBox />
     </div>
   );
 };

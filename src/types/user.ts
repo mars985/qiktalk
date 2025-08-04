@@ -1,6 +1,6 @@
 type User = {
-  id: string;
-  name: string;
+  _id: string;
+  username: string;
   avatarUrl?: string;
 };
 

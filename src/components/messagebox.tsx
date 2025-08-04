@@ -27,12 +27,13 @@ const MessageBox: React.FC = () => {
         name="sendMessage"
         placeholder="Type here"
         rows={3}
+        className="text-white"
         onInput={handleInput}
         style={{
           outline: "none",
           width: "100%",
           padding: "12px",
-          background: "#f1f0f0",
+          background: "#374151",
           borderRadius: "8px",
           resize: "none",
           wordBreak: "break-word",

@@ -1,7 +1,7 @@
 type Message = {
     id: string;
-    content: string;
-    senderId: string;
+    body: string;
+    sender: string;
     timestamp: Date;
 };
 

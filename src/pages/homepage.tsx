@@ -1,15 +1,32 @@
-import Messages from "../components/ui/messages";
+import Messages from "../components/messages";
 import {
   ResizableHandle,
   ResizablePanel,
   ResizablePanelGroup,
 } from "../components/ui/resizable";
-import UsersListView from "../components/ui/users";
+import Conversations from "../components/conversations";
+import { Moon, Sun } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdownmenu";
+import { useTheme } from "@/components/providers/theme-provider";
+
+import { useNavigate } from "react-router-dom";
 
 import type { User } from "../types/user";
 import type { Message } from "../types/message";
+import axios from "axios";
 
 const HomePage = () => {
+  const navigate = useNavigate();
+
+  const { setTheme } = useTheme();
+
   return (
     <>
       <ResizablePanelGroup
@@ -17,23 +34,52 @@ const HomePage = () => {
         className="bg-gray-500 h-full"
       >
         <ResizablePanel
-          className="w-full items-center justify-center bg-red-300"
+          className="items-center justify-center"
+          style={{ backgroundColor: "#111827" }}
           minSize={20}
           maxSize={50}
           defaultSize={25}
         >
-          <div className="flex flex-col justify-top h-full">
-            <div className="h-16 flex items-center justify-center">
-              <h1 className="text-2xl font-bold">User</h1>
-            </div>
-            <hr />
-            <UsersListView users={userArr} />
+          <Button
+            variant={"secondary"}
+            onClick={() => {
+              axios.get("http://localhost:3000/logout", {
+                withCredentials: true,
+              });
+              navigate("/login");
+            }}
+          >
+            Logout
+          </Button>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" size="icon">
+                <Sun className="h-[1.2rem] w-[1.2rem] scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90" />
+                <Moon className="absolute h-[1.2rem] w-[1.2rem] scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0" />
+                <span className="sr-only">Toggle theme</span>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem onClick={() => setTheme("light")}>
+                Light
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setTheme("dark")}>
+                Dark
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setTheme("system")}>
+                System
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+
+          <div style={{ flexDirection: "column" }}>
+            <Conversations users={userArr}></Conversations>
           </div>
         </ResizablePanel>
 
-        <ResizableHandle className="bg-gray-400" />
+        <ResizableHandle style={{ backgroundColor: "#374151" }} />
 
-        <ResizablePanel className="w-full bg-blue-300">
+        <ResizablePanel style={{ backgroundColor: "#1f2937" }}>
           <Messages messages={messagesArr}></Messages>
         </ResizablePanel>
       </ResizablePanelGroup>
@@ -64,74 +110,74 @@ const userArr = [
 const messagesArr: Message[] = [
   {
     id: "1",
-    content: "Hello, how are you?",
-    senderId: "1",
+    body: "Hello, how are you?",
+    sender: "1",
     timestamp: new Date(),
   },
   {
     id: "2",
-    content: "I'm good, thanks! And you?",
-    senderId: "2",
+    body: "I'm good, thanks! And you?",
+    sender: "2",
     timestamp: new Date(),
   },
   {
     id: "3",
-    content: "Doing well, just working on a project.",
-    senderId: "1",
+    body: "Doing well, just working on a project.",
+    sender: "1",
     timestamp: new Date(),
   },
   {
     id: "1",
-    content: "Hello, how are you?",
-    senderId: "1",
+    body: "Hello, how are you?",
+    sender: "1",
     timestamp: new Date(),
   },
   {
     id: "2",
-    content: "I'm good, thanks! And you?",
-    senderId: "2",
+    body: "I'm good, thanks! And you?",
+    sender: "2",
     timestamp: new Date(),
   },
   {
     id: "3",
-    content: "Doing well, just working on a project.",
-    senderId: "1",
+    body: "Doing well, just working on a project.",
+    sender: "1",
     timestamp: new Date(),
   },
   {
     id: "1",
-    content: "Hello, how are you?",
-    senderId: "1",
+    body: "Hello, how are you?",
+    sender: "1",
     timestamp: new Date(),
   },
   {
     id: "2",
-    content: "I'm good, thanks! And you?",
-    senderId: "2",
+    body: "I'm good, thanks! And you?",
+    sender: "2",
     timestamp: new Date(),
   },
   {
     id: "3",
-    content: "Doing well, just working on a project.",
-    senderId: "1",
+    body: "Doing well, just working on a project.",
+    sender: "1",
     timestamp: new Date(),
   },
   {
     id: "1",
-    content: "Hello, how are you?",
-    senderId: "1",
+    body: "Hello, how are you?",
+    sender: "1",
     timestamp: new Date(),
   },
   {
     id: "2",
-    content: "I'm good, thanks! And you?",
-    senderId: "2",
+    body: "I'm good, thanks! And you?",
+    sender: "2",
     timestamp: new Date(),
   },
   {
     id: "3",
-    content: "Doing well, just working on a project.",
-    senderId: "1",
+    body: "Doing well, just working on a project.",
+    sender: "1",
     timestamp: new Date(),
   },
 ];
