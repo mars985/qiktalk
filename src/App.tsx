@@ -6,7 +6,7 @@ import LoginPage from "./pages/loginpage";
 import { Route, Routes } from "react-router-dom";
 import ProtectedRoute from "./components/ui/protectedroute";
 import SignupPage from "./pages/signuppage";
-import { ThemeProvider } from "./components/providers/theme-provider";
+import { ThemeProvider } from "@/contexts/ThemeContext";
 import { UserProvider } from "./contexts/UserContext";
 
 export default function App() {

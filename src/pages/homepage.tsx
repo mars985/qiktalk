@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 
 // Theme & icons
 import { Moon, Sun } from "lucide-react";
-import { useTheme } from "@/components/providers/theme-provider";
 
 // UI Components
 import { Avatar } from "@mui/material";
@@ -31,6 +30,7 @@ import type { Message } from "../types/message";
 import axios from "axios";
 import { deepOrange } from "@mui/material/colors";
 import useUser from "@/hooks/useUser";
+import { useTheme } from "@/hooks/useTheme";
 
 const HomePage = () => {
   const navigate = useNavigate();

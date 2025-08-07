@@ -14,4 +14,4 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
   );
 };
 
-export { UserContext }; // still exporting, but now this file is dedicated to context
+export { UserContext };

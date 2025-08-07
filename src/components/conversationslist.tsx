@@ -1,5 +1,5 @@
 import React from "react";
-import useConversations from "./providers/conversaton-provider";
+import useConversations from "../hooks/useConversations";
 
 const ConversationsList: React.FC = () => {
   const { conversations, loading, error } = useConversations();
@@ -26,7 +26,8 @@ const ConversationsList: React.FC = () => {
               </div>
               <div className="text-sm text-gray-600">
                 {conv.messages?.length > 0
-                  ? conv.messages[conv.messages.length - 1]?.body || "No message text"
+                  ? conv.messages[conv.messages.length - 1]?.body ||
+                    "No message text"
                   : "No messages yet"}
               </div>
             </li>
