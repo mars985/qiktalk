@@ -1,0 +1,4 @@
+- search for users
+- implement themes
+- select conversation on left panel to show messages on right panel
+- send message (socket for real time updates?)

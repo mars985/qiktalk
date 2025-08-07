@@ -9,5 +9,4 @@ type UserContextType = {
   setUser: React.Dispatch<React.SetStateAction<User | null>>;
 };
 
-export type { User };
-export type { UserContextType };
+export type { User, UserContextType };

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
+  CardAction,
   CardContent,
   CardHeader,
   CardTitle,
@@ -48,6 +49,9 @@ const SignupPage = () => {
       <Card className="w-full max-w-sm">
         <CardHeader>
           <CardTitle>Create your account</CardTitle>
+          <CardAction onClick={() => (window.location.href = "/login")}>
+            <Button variant="link">Log in</Button>
+          </CardAction>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="flex flex-col gap-6">

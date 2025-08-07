@@ -1,9 +1,7 @@
 import type { User } from "./user";
 import type { Message } from "./message";
 
-export type ConversationType = "dm" | "group";
-
-export type Conversation = {
+type Conversation = {
   _id: string;
   type: ConversationType;
   participants: User[];
@@ -11,3 +9,7 @@ export type Conversation = {
   groupName: string | null;
   updatedAt: string | null;
 }
+
+type ConversationType = "dm" | "group";
+
+export type { Conversation, ConversationType }
