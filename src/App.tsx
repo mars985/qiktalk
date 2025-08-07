@@ -1,4 +1,3 @@
-import React from "react";
 import { useEffect } from "react";
 import { io } from "socket.io-client";
 
@@ -8,6 +7,7 @@ import { Route, Routes } from "react-router-dom";
 import ProtectedRoute from "./components/ui/protectedroute";
 import SignupPage from "./pages/signuppage";
 import { ThemeProvider } from "./components/providers/theme-provider";
+import { UserProvider } from "./contexts/UserContext";
 
 export default function App() {
   useEffect(() => {
@@ -30,9 +30,11 @@ export default function App() {
         <Route
           path="/"
           element={
-            <ProtectedRoute>
-              <HomePage />
-            </ProtectedRoute>
+            <UserProvider>
+              <ProtectedRoute>
+                <HomePage />
+              </ProtectedRoute>{" "}
+            </UserProvider>
           }
         />
       </Routes>

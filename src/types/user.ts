@@ -4,4 +4,10 @@ type User = {
   avatarUrl?: string;
 };
 
+type UserContextType = {
+  user: User | null;
+  setUser: React.Dispatch<React.SetStateAction<User | null>>;
+};
+
 export type { User };
+export type { UserContextType };

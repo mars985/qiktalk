@@ -30,11 +30,12 @@ import type { Message } from "../types/message";
 // Utils
 import axios from "axios";
 import { deepOrange } from "@mui/material/colors";
+import useUser from "@/hooks/useUser";
 
 const HomePage = () => {
   const navigate = useNavigate();
-
   const { setTheme } = useTheme();
+  const { user } = useUser();
 
   return (
     <>
@@ -55,10 +56,20 @@ const HomePage = () => {
               alignItems: "center",
               justifyContent: "center",
               flexDirection: "column",
-              padding: 10,
             }}
           >
-            <Avatar sx={{ bgcolor: deepOrange[500] }}>M</Avatar>
+            <div
+              className="text-white"
+              style={{
+                alignContent: "center",
+                height: 120,
+              }}
+            >
+              <Avatar sx={{ bgcolor: deepOrange[500], scale: 2 }}>M</Avatar>
+            </div>
+            <div className="text-white text-xl">
+              <h1>{user?.username || "Welcome"}</h1>
+            </div>
             <div
               style={{
                 display: "flex",
