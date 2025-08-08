@@ -10,8 +10,8 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import api from "@/lib/axios";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -22,7 +22,7 @@ const LoginPage = () => {
     e.preventDefault(); // prevent page reload
 
     try {
-      const response = await axios.post(
+      const response = await api.post(
         "http://localhost:3000/login",
         {
           email,

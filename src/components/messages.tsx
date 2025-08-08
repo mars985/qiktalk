@@ -1,16 +1,13 @@
 import React, { useEffect, useRef } from "react";
 import MessageTile from "./messagetile";
 import MessageBox from "./messagebox";
-import type { Message } from "../../types/message";
 
-interface MessagesProps {
-  messages: Message[];
-}
+import useUser from "@/hooks/useUser";
+import type { Message } from "@/types/message";
 
-const thisUser = "1"; // Replace with actual logic to get current user ID
-
-const Messages: React.FC<MessagesProps> = ({ messages }) => {
+const Messages: React.FC<{ messages: Message[] }> = ({ messages }) => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const { user } = useUser();
 
   // Scroll to bottom when new messages arrive
   useEffect(() => {
@@ -26,7 +23,7 @@ const Messages: React.FC<MessagesProps> = ({ messages }) => {
         className="messages-list h-[80vh] overflow-y-auto px-4 mt-4 flex flex-col-reverse gap-2"
       >
         {[...messages].reverse().map((message) => {
-          const isOwn = message.sender === thisUser;
+          const isOwn = user ? message.sender._id === user._id : false;
           return (
             <div
               key={message.id}
@@ -39,6 +36,7 @@ const Messages: React.FC<MessagesProps> = ({ messages }) => {
         {messages.length === 0 && (
           <div className="text-center text-gray-500 py-6">
             No messages found.
+            <h1></h1>
           </div>
         )}
       </div>

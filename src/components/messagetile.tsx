@@ -22,7 +22,7 @@ const MessageTile: React.FC<{ message: Message; isOwn: boolean }> = ({
     {isOwn ? (
       <span style={{ fontSize: 12, color: "#555" }}>You</span>
     ) : (
-      <span style={{ fontSize: 14, color: "#555" }}>{message.sender}</span>
+      <span style={{ fontSize: 14, color: "#555" }}>{message.sender.username}</span>
     )}
     <span style={{ fontSize: 16 }}>{message.body}</span>
   </div>

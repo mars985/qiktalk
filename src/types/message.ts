@@ -1,7 +1,9 @@
+import type { User } from "./user";
+
 type Message = {
     id: string;
     body: string;
-    sender: string;
+    sender: User;
     timestamp: Date;
 };
 

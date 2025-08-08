@@ -6,8 +6,8 @@ const MessageBox: React.FC = () => {
   const handleInput = () => {
     const textarea = textareaRef.current;
     if (textarea) {
-      textarea.style.height = "auto"; // Reset to auto to shrink if needed
-      const maxHeight = 5 * 24; // Approx. 5 rows (24px line height)
+      textarea.style.height = "auto";
+      const maxHeight = 5 * 24;
       textarea.style.height = Math.min(textarea.scrollHeight, maxHeight) + "px";
     }
   };

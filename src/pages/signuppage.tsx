@@ -9,8 +9,8 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import api from "@/lib/axios";
 
 const SignupPage = () => {
   const [username, setUsername] = useState("");
@@ -23,7 +23,7 @@ const SignupPage = () => {
     e.preventDefault(); // prevent page reload
 
     try {
-      const response = await axios.post(
+      const response = await api.post(
         "http://localhost:3000/createUser",
         { email, password, username },
         { withCredentials: true }

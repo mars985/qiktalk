@@ -1,5 +1,6 @@
 // React & routing
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 // Theme & icons
 import { Moon, Sun } from "lucide-react";
@@ -18,13 +19,11 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from "../components/ui/resizable";
+import SearchBar from "@/components/searchbar";
 
 // App Components
 import ConversationsList from "../components/conversationslist";
 import Messages from "../components/messages";
-
-// Types
-import type { Message } from "../types/message";
 
 // Utils
 import axios from "axios";
@@ -32,20 +31,21 @@ import { deepOrange } from "@mui/material/colors";
 import useUser from "@/hooks/useUser";
 import { useTheme } from "@/hooks/useTheme";
 
+// Types
+import type { Message } from "@/types/message";
+
 const HomePage = () => {
   const navigate = useNavigate();
   const { setTheme } = useTheme();
   const { user } = useUser();
+  const [messages, setMessages] = useState<Message[]>([]);
 
   return (
     <>
-      <ResizablePanelGroup
-        direction="horizontal"
-        className="bg-gray-500 h-full"
-      >
+      <ResizablePanelGroup direction="horizontal" className="h-full">
         <ResizablePanel
           // className="items-center justify-center"
-          style={{ backgroundColor: "#111827" }}
+          // style={{ backgroundColor: "#111827" }}
           minSize={20}
           maxSize={50}
           defaultSize={25}
@@ -59,7 +59,6 @@ const HomePage = () => {
             }}
           >
             <div
-              className="text-white"
               style={{
                 alignContent: "center",
                 height: 120,
@@ -67,7 +66,7 @@ const HomePage = () => {
             >
               <Avatar sx={{ bgcolor: deepOrange[500], scale: 2 }}>M</Avatar>
             </div>
-            <div className="text-white text-xl">
+            <div className="text-xl">
               <h1>{user?.username || "Welcome"}</h1>
             </div>
             <div
@@ -111,16 +110,21 @@ const HomePage = () => {
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
+            <SearchBar setMessages={setMessages} />
           </div>
           <div style={{ flexDirection: "column" }}>
-            <ConversationsList></ConversationsList>
+            <ConversationsList />
           </div>
         </ResizablePanel>
 
-        <ResizableHandle style={{ backgroundColor: "#374151" }} />
+        <ResizableHandle />
+        {/* style={{ backgroundColor: "#374151" }}  */}
+        <ResizablePanel>
+          {/* style={{ backgroundColor: "#1f2937" }} */}
+          <div>
 
-        <ResizablePanel style={{ backgroundColor: "#1f2937" }}>
-          <Messages messages={messagesArr}></Messages>
+            <Messages messages={messages}></Messages>
+          </div>
         </ResizablePanel>
       </ResizablePanelGroup>
     </>
@@ -128,96 +132,3 @@ const HomePage = () => {
 };
 
 export default HomePage;
-
-// const userArr = [
-//   {
-//     id: "1",
-//     name: "Alice",
-//     avatarUrl: "https://i.pravatar.cc/40?img=1",
-//   },
-//   {
-//     id: "2",
-//     name: "Bob",
-//     avatarUrl: "https://i.pravatar.cc/40?img=2",
-//   },
-//   {
-//     id: "3",
-//     name: "Charlie",
-//     avatarUrl: "https://i.pravatar.cc/40?img=3",
-//   },
-// ] as const satisfies User[];
-
-const messagesArr: Message[] = [
-  {
-    id: "1",
-    body: "Hello, how are you?",
-    sender: "1",
-    timestamp: new Date(),
-  },
-  {
-    id: "2",
-    body: "I'm good, thanks! And you?",
-    sender: "2",
-    timestamp: new Date(),
-  },
-  {
-    id: "3",
-    body: "Doing well, just working on a project.",
-    sender: "1",
-    timestamp: new Date(),
-  },
-  {
-    id: "1",
-    body: "Hello, how are you?",
-    sender: "1",
-    timestamp: new Date(),
-  },
-  {
-    id: "2",
-    body: "I'm good, thanks! And you?",
-    sender: "2",
-    timestamp: new Date(),
-  },
-  {
-    id: "3",
-    body: "Doing well, just working on a project.",
-    sender: "1",
-    timestamp: new Date(),
-  },
-  {
-    id: "1",
-    body: "Hello, how are you?",
-    sender: "1",
-    timestamp: new Date(),
-  },
-  {
-    id: "2",
-    body: "I'm good, thanks! And you?",
-    sender: "2",
-    timestamp: new Date(),
-  },
-  {
-    id: "3",
-    body: "Doing well, just working on a project.",
-    sender: "1",
-    timestamp: new Date(),
-  },
-  {
-    id: "1",
-    body: "Hello, how are you?",
-    sender: "1",
-    timestamp: new Date(),
-  },
-  {
-    id: "2",
-    body: "I'm good, thanks! And you?",
-    sender: "2",
-    timestamp: new Date(),
-  },
-  {
-    id: "3",
-    body: "Doing well, just working on a project.",
-    sender: "1",
-    timestamp: new Date(),
-  },
-];
