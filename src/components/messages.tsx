@@ -5,7 +5,10 @@ import MessageBox from "./messagebox";
 import useUser from "@/hooks/useUser";
 import type { Message } from "@/types/message";
 
-const Messages: React.FC<{ messages: Message[] }> = ({ messages }) => {
+const Messages: React.FC<{
+  messages: Message[];
+  conversationId: string | null;
+}> = ({ messages, conversationId }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const { user } = useUser();
 
@@ -36,11 +39,11 @@ const Messages: React.FC<{ messages: Message[] }> = ({ messages }) => {
         {messages.length === 0 && (
           <div className="text-center text-gray-500 py-6">
             No messages found.
-            <h1></h1>
+            <h1>{conversationId?conversationId:"no conversation id"}</h1>
           </div>
         )}
       </div>
-      <MessageBox />
+      <MessageBox conversationId={conversationId} />
     </div>
   );
 };

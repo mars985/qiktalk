@@ -14,7 +14,8 @@ import type { Message } from "@/types/message";
 
 const SearchBar: React.FC<{
   setMessages: React.Dispatch<React.SetStateAction<Message[]>>;
-}> = ({ setMessages }) => {
+  setConversationId: React.Dispatch<React.SetStateAction<string | null>>;
+}> = ({ setMessages, setConversationId }) => {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<User[]>([]);
   const [loading, setLoading] = useState(false);
@@ -78,11 +79,10 @@ const SearchBar: React.FC<{
     setQuery("");
     setOpen(false);
     try {
-      // Step 1: Create DM or get existing one
-      const convRes = await api.post("/createDM", { _id });
+      const convRes = await api.post("/createDM", { targetUserId: _id });
       const conversationId = convRes.data._id;
-
-      // Step 2: Fetch messages for this conversation
+      setConversationId(conversationId);
+      
       const messagesRes = await api.get(
         `/conversations/${conversationId}/messages`
       );

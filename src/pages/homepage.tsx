@@ -39,6 +39,7 @@ const HomePage = () => {
   const { setTheme } = useTheme();
   const { user } = useUser();
   const [messages, setMessages] = useState<Message[]>([]);
+  const [conversationId, setConversationId] = useState<string | null>(null);
 
   return (
     <>
@@ -110,10 +111,10 @@ const HomePage = () => {
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
-            <SearchBar setMessages={setMessages} />
+            <SearchBar setMessages={setMessages} setConversationId={setConversationId} />
           </div>
           <div style={{ flexDirection: "column" }}>
-            <ConversationsList />
+            <ConversationsList setConversationId={setConversationId}/>
           </div>
         </ResizablePanel>
 
@@ -123,7 +124,7 @@ const HomePage = () => {
           {/* style={{ backgroundColor: "#1f2937" }} */}
           <div>
 
-            <Messages messages={messages}></Messages>
+            <Messages messages={messages} conversationId={conversationId}></Messages>
           </div>
         </ResizablePanel>
       </ResizablePanelGroup>

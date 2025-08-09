@@ -1,7 +1,13 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
+import api from "@/lib/axios";
+import useUser from "@/hooks/useUser";
 
-const MessageBox: React.FC = () => {
+const MessageBox: React.FC<{ conversationId: string | null }> = ({
+  conversationId,
+}) => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const [text, setText] = useState("");
+  const { user } = useUser();
 
   const handleInput = () => {
     const textarea = textareaRef.current;
@@ -9,6 +15,35 @@ const MessageBox: React.FC = () => {
       textarea.style.height = "auto";
       const maxHeight = 5 * 24;
       textarea.style.height = Math.min(textarea.scrollHeight, maxHeight) + "px";
+    }
+  };
+
+  const sendMessage = async () => {
+    if (!text.trim()) {
+      console.log("trimmed");
+      return;
+    }
+
+    try {
+      const res = await api.post("/sendMessage", {
+        message: text.trim(),
+        conversationId,
+        senderId: user?._id,
+      });
+
+      console.log("Message sent:", res.data);
+      setText("");
+      handleInput();
+    } catch (err) {
+      console.error("Error sending message:", err);
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    console.log("Key pressed:", e.key);
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage();
     }
   };
 
@@ -27,13 +62,15 @@ const MessageBox: React.FC = () => {
         name="sendMessage"
         placeholder="Type here"
         rows={3}
-        className="text-white"
+        value={text}
+        onChange={(e) => setText(e.target.value)}
         onInput={handleInput}
+        onKeyDown={handleKeyDown}
         style={{
           outline: "none",
           width: "100%",
           padding: "12px",
-          background: "#374151",
+          // background: "#374151",
           borderRadius: "8px",
           resize: "none",
           wordBreak: "break-word",
