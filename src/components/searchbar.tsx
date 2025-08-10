@@ -84,7 +84,7 @@ const SearchBar: React.FC<{
       setConversationId(conversationId);
       
       const messagesRes = await api.get(
-        `/conversations/${conversationId}/messages`
+        `/messages/${conversationId}`
       );
       setMessages(messagesRes.data);
     } catch (err) {

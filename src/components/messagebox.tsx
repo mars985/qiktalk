@@ -58,6 +58,7 @@ const MessageBox: React.FC<{ conversationId: string | null }> = ({
       }}
     >
       <textarea
+        className="bg-zinc-200 dark:bg-zinc-800"
         ref={textareaRef}
         name="sendMessage"
         placeholder="Type here"
@@ -68,7 +69,7 @@ const MessageBox: React.FC<{ conversationId: string | null }> = ({
         onKeyDown={handleKeyDown}
         style={{
           outline: "none",
-          width: "100%",
+          width: "80%",
           padding: "12px",
           // background: "#374151",
           borderRadius: "8px",

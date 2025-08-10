@@ -1,6 +1,6 @@
 // React & routing
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 // Theme & icons
 import { Moon, Sun } from "lucide-react";
@@ -26,13 +26,13 @@ import ConversationsList from "../components/conversationslist";
 import Messages from "../components/messages";
 
 // Utils
-import axios from "axios";
 import { deepOrange } from "@mui/material/colors";
 import useUser from "@/hooks/useUser";
 import { useTheme } from "@/hooks/useTheme";
 
 // Types
 import type { Message } from "@/types/message";
+import api from "@/lib/axios";
 
 const HomePage = () => {
   const navigate = useNavigate();
@@ -40,6 +40,20 @@ const HomePage = () => {
   const { user } = useUser();
   const [messages, setMessages] = useState<Message[]>([]);
   const [conversationId, setConversationId] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchMessages = async () => {
+      try {
+        const res = await api.get(`/messages/${conversationId}`);
+        setMessages(res.data); // make sure to use res.data
+      } catch (err) {
+        console.error("Error fetching messages:", err);
+      }
+    };
+    if (conversationId) {
+      fetchMessages();
+    }
+  }, [conversationId]);
 
   return (
     <>
@@ -82,9 +96,7 @@ const HomePage = () => {
               <Button
                 variant={"secondary"}
                 onClick={() => {
-                  axios.get("http://localhost:3000/logout", {
-                    withCredentials: true,
-                  });
+                  api.get("/logout");
                   navigate("/login");
                 }}
               >
@@ -111,10 +123,13 @@ const HomePage = () => {
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
-            <SearchBar setMessages={setMessages} setConversationId={setConversationId} />
+            <SearchBar
+              setMessages={setMessages}
+              setConversationId={setConversationId}
+            />
           </div>
           <div style={{ flexDirection: "column" }}>
-            <ConversationsList setConversationId={setConversationId}/>
+            <ConversationsList setConversationId={setConversationId} />
           </div>
         </ResizablePanel>
 
@@ -123,8 +138,10 @@ const HomePage = () => {
         <ResizablePanel>
           {/* style={{ backgroundColor: "#1f2937" }} */}
           <div>
-
-            <Messages messages={messages} conversationId={conversationId}></Messages>
+            <Messages
+              messages={messages}
+              conversationId={conversationId}
+            ></Messages>
           </div>
         </ResizablePanel>
       </ResizablePanelGroup>

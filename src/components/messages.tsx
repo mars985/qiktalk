@@ -39,7 +39,7 @@ const Messages: React.FC<{
         {messages.length === 0 && (
           <div className="text-center text-gray-500 py-6">
             No messages found.
-            <h1>{conversationId?conversationId:"no conversation id"}</h1>
+            <h1>{conversationId ? conversationId : "no conversation id"}</h1>
           </div>
         )}
       </div>
