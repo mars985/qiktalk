@@ -1,13 +1,14 @@
 import { useEffect } from "react";
+import { Route, Routes } from "react-router-dom";
 import { io } from "socket.io-client";
 
-import HomePage from "./pages/HomePage";
-import LoginPage from "./pages/LoginPage";
-import { Route, Routes } from "react-router-dom";
+import { ThemeProvider } from "@/contexts/ThemeContext";
+import { UserProvider } from "@/contexts/UserContext";
+
 import ProtectedRoute from "./components/ui/protectedroute";
 import SignupPage from "./pages/SignupPage";
-import { ThemeProvider } from "@/contexts/ThemeContext";
-import { UserProvider } from "./contexts/UserContext";
+import LoginPage from "./pages/LoginPage";
+import HomePage from "./pages/HomePage";
 
 export default function App() {
   useEffect(() => {
@@ -33,7 +34,7 @@ export default function App() {
             <UserProvider>
               <ProtectedRoute>
                 <HomePage />
-              </ProtectedRoute>{" "}
+              </ProtectedRoute>
             </UserProvider>
           }
         />

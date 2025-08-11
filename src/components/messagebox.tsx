@@ -51,7 +51,7 @@ const MessageBox: React.FC<{ conversationId: string | null }> = ({
     <div
       className="messagebox flex justify-center"
       style={{
-        padding: "8px 12px",
+        padding: "12px",
         display: "flex",
         alignItems: "center",
         flexDirection: "row",

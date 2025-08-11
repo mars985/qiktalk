@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import api from "@/lib/axios";
-import type { Conversation } from "../types/conversation";
+import type { Conversation } from "@/types/conversation";
 
 export function useConversations() {
   const [conversations, setConversations] = useState<Conversation[]>([]);

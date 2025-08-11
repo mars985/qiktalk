@@ -1,18 +1,17 @@
 import React, { useEffect, useRef } from "react";
-import MessageTile from "./messagetile";
-import MessageBox from "./messagebox";
+import MessageTile from "./MessageTile";
+import MessageBox from "./MessageBox";
 
 import useUser from "@/hooks/useUser";
-import type { Message } from "@/types/message";
+import type { Message} from "@/types/message";
 
-const Messages: React.FC<{
+const MessagePanel: React.FC<{
   messages: Message[];
   conversationId: string | null;
 }> = ({ messages, conversationId }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const { user } = useUser();
 
-  // Scroll to bottom when new messages arrive
   useEffect(() => {
     if (containerRef.current) {
       containerRef.current.scrollTop = containerRef.current.scrollHeight;
@@ -23,7 +22,13 @@ const Messages: React.FC<{
     <div>
       <div
         ref={containerRef}
-        className="messages-list h-[80vh] overflow-y-auto px-4 mt-4 flex flex-col-reverse gap-2"
+        className="messages-list h-[80vh] overflow-y-auto px-4 flex flex-col-reverse gap-2"
+        style={
+          {
+            // marginBottom: "2px",
+            // backgroundColor: "red",
+          }
+        }
       >
         {[...messages].reverse().map((message) => {
           const isOwn = user ? message.sender._id === user._id : false;
@@ -48,4 +53,6 @@ const Messages: React.FC<{
   );
 };
 
-export default Messages;
+export default MessagePanel;
+
+// TODO: add padding to bottom most message, beautify message box
