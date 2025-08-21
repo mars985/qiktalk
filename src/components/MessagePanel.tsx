@@ -3,7 +3,7 @@ import MessageTile from "./MessageTile";
 import MessageBox from "./MessageBox";
 
 import useUser from "@/hooks/useUser";
-import type { Message} from "@/types/message";
+import type { Message } from "@/types/message";
 
 const MessagePanel: React.FC<{
   messages: Message[];
@@ -30,18 +30,19 @@ const MessagePanel: React.FC<{
           }
         }
       >
-        {[...messages].reverse().map((message) => {
-          const isOwn = user ? message.sender._id === user._id : false;
-          return (
-            <div
-              key={message.id}
-              className={`flex ${isOwn ? "justify-end" : "justify-start"}`}
-            >
-              <MessageTile message={message} isOwn={isOwn} />
-            </div>
-          );
-        })}
-        {messages.length === 0 && (
+        {(messages ?? []).length > 0 ? (
+          [...messages].reverse().map((message) => {
+            const isOwn = user ? message.sender._id === user._id : false;
+            return (
+              <div
+                key={message._id} // use _id instead of id if that’s what your backend sends
+                className={`flex ${isOwn ? "justify-end" : "justify-start"}`}
+              >
+                <MessageTile message={message} isOwn={isOwn} />
+              </div>
+            );
+          })
+        ) : (
           <div className="text-center text-gray-500 py-6">
             No messages found.
             <h1>{conversationId ? conversationId : "no conversation id"}</h1>

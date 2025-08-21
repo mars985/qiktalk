@@ -1,6 +1,6 @@
-import { useEffect } from "react";
+// import { useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
-import { io } from "socket.io-client";
+// import { io } from "socket.io-client";
 
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import { UserProvider } from "@/contexts/UserContext";
@@ -11,17 +11,17 @@ import LoginPage from "./pages/LoginPage";
 import HomePage from "./pages/HomePage";
 
 export default function App() {
-  useEffect(() => {
-    const socket = io("http://localhost:3000");
+  // useEffect(() => {
+  //   const socket = io("http://localhost:3000");
 
-    socket.on("connect", () => {
-      // alert("Connected to the server!");
-    });
+  //   socket.on("connect", () => {
+  //     // alert("Connected to the server!");
+  //   });
 
-    return () => {
-      socket.disconnect();
-    };
-  }, []);
+  //   return () => {
+  //     socket.disconnect();
+  //   };
+  // }, []);
 
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">

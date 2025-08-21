@@ -21,6 +21,8 @@ const MessageTile: React.FC<{ message: Message; isOwn: boolean }> = ({
       borderRadius: "12px",
       wordBreak: "break-word",
       alignItems: isOwn ? "flex-end" : "flex-start",
+      whiteSpace: "pre-wrap",
+      // fontFamily: "monospace",
     }}
   >
     {isOwn ? (

@@ -25,8 +25,8 @@ const MessageBox: React.FC<{ conversationId: string | null }> = ({
     }
 
     try {
+      if (!text.replace(/\s/g, "").length) return;
       const res = await api.post("/sendMessage", {
-        message: text.trim(),
         conversationId,
         senderId: user?._id,
       });

@@ -11,8 +11,10 @@ export function useConversations() {
     api
       .get("/getConversations")
       .then((res) => {
-        setConversations(res.data);
-        setLoading(false);
+        if (res.data.success) {
+          setConversations(res.data.data);
+          setLoading(false);
+        } else throw new Error();
       })
       .catch((err) => {
         setError(err.message || "Failed to load conversations");

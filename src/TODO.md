@@ -1,7 +1,42 @@
-- *search for users
-- *implement themes
-- select conversation on left panel to show messages on right panel
-  - take conversation from conversationslist, setstate on homepage
+## HomePage
+#### Sidebar
 
+- logout
+- toggle theme
+- search users
+- conversation list
 
-- send message (socket for real time updates?)
+#### Chat
+
+- messages
+- text area
+
+## Hierarchy
+```python
+
+HomePage
+  #Sidebar
+    - Logout
+    - ToggleTheme
+    - SearchBar
+    - ConversationList
+      - ConversationTile
+
+  #Chat
+    MessagePanel
+      - MessageTile
+      - MessageBox
+
+```
+
+### States
+
+1. `user <User>`
+   - set by login
+   - used by SearchBar
+   - used by MessageBox
+
+2. `conversationId <string>`
+   - set by SearchBar
+   - set by ConversationTile
+ 

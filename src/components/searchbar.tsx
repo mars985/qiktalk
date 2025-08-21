@@ -60,11 +60,11 @@ const SearchBar: React.FC<{
   const searchUsernames = async (searchString: string) => {
     try {
       setLoading(true);
-      const res = await api.get<User[]>("/searchUsernames", {
+      const res = await api.get("/searchUsernames", {
         params: { searchString },
       });
-      setResults(res.data);
-      setOpen(res.data.length > 0);
+      setResults(res.data.data);
+      setOpen(res.data.data.length > 0);
     } catch (error) {
       console.error("Error searching usernames:", error);
       setResults([]);
@@ -80,7 +80,8 @@ const SearchBar: React.FC<{
     setOpen(false);
     try {
       const convRes = await api.post("/createDM", { targetUserId: _id });
-      const conversationId = convRes.data._id;
+      // console.log(convRes);
+      const conversationId = convRes.data.data._id;
       setConversationId(conversationId);
       
       const messagesRes = await api.get(

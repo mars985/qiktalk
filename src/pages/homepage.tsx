@@ -34,7 +34,9 @@ const HomePage = () => {
     const fetchMessages = async () => {
       try {
         const res = await api.get(`/messages/${conversationId}`);
-        setMessages(res.data); // make sure to use res.data
+        setMessages(res.data.data);
+        console.log("Messages");
+        console.log(res.data.data);
       } catch (err) {
         console.error("Error fetching messages:", err);
       }
@@ -82,8 +84,8 @@ const HomePage = () => {
                 padding: 20,
               }}
             >
-              <LogoutButton/>
-              <ToggleTheme/>
+              <LogoutButton />
+              <ToggleTheme />
             </div>
             <SearchBar
               setMessages={setMessages}
