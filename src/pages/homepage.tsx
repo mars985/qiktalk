@@ -35,8 +35,6 @@ const HomePage = () => {
       try {
         const res = await api.get(`/messages/${conversationId}`);
         setMessages(res.data.data);
-        console.log("Messages");
-        console.log(res.data.data);
       } catch (err) {
         console.error("Error fetching messages:", err);
       }

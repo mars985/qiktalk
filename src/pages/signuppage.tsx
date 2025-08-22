@@ -16,7 +16,7 @@ const SignupPage = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  
+
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -28,9 +28,8 @@ const SignupPage = () => {
         { email, password, username },
         { withCredentials: true }
       );
-
-      console.log("Signin success:", response.data);
-      navigate("/");
+      if (response.data.success === true) navigate("/");
+      else throw "Server failure";
     } catch (err) {
       console.error("Signin failed:", err);
     }

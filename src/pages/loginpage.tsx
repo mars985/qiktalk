@@ -31,8 +31,8 @@ const LoginPage = () => {
         { withCredentials: true }
       );
 
-      console.log("Login success:", response.data);
-      navigate("/");
+      if (response.data.success === true) navigate("/");
+      else throw "Server failure";
     } catch (err) {
       console.error("Login failed:", err);
     }

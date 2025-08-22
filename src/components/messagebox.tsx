@@ -18,32 +18,30 @@ const MessageBox: React.FC<{ conversationId: string | null }> = ({
     }
   };
 
-  const sendMessage = async () => {
-    if (!text.trim()) {
-      console.log("trimmed");
-      return;
-    }
-
-    try {
-      if (!text.replace(/\s/g, "").length) return;
-      const res = await api.post("/sendMessage", {
-        conversationId,
-        senderId: user?._id,
-      });
-
-      console.log("Message sent:", res.data);
-      setText("");
-      handleInput();
-    } catch (err) {
-      console.error("Error sending message:", err);
-    }
-  };
-
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     console.log("Key pressed:", e.key);
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       sendMessage();
+    }
+  };
+
+  const sendMessage = async () => {
+    if (!text.trim()) return;
+    // if(!conversationId) return;
+
+    try {
+      if (!text.replace(/\s/g, "").length) return;
+      await api.post("/sendMessage", {
+        message: text,
+        conversationId,
+        senderId: user?._id,
+      });
+
+      setText("");
+      handleInput();
+    } catch (err) {
+      console.error("Error sending message:", err);
     }
   };
 
