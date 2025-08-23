@@ -1,19 +1,5 @@
-## HomePage
-#### Sidebar
-
-- logout
-- toggle theme
-- search users
-- conversation list
-
-#### Chat
-
-- messages
-- text area
-
 ## Hierarchy
 ```python
-
 HomePage
   #Sidebar
     - Logout
@@ -26,17 +12,11 @@ HomePage
     MessagePanel
       - MessageTile
       - MessageBox
-
 ```
 
-### States
+## TODO
 
-1. `user <User>`
-   - set by login
-   - used by SearchBar
-   - used by MessageBox
-
-2. `conversationId <string>`
-   - set by SearchBar
-   - set by ConversationTile
- 
+- conversation list socket
+- edit message
+- delete message
+- groups
