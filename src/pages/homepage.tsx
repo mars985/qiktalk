@@ -21,28 +21,12 @@ import useUser from "@/hooks/useUser";
 import api from "@/lib/axios";
 
 // Types
-import type { Message } from "@/types/message";
 import ToggleTheme from "@/components/ToggleTheme";
 import LogoutButton from "@/components/LogoutButton";
 
 const HomePage = () => {
   const { user } = useUser();
-  const [messages, setMessages] = useState<Message[]>([]);
   const [conversationId, setConversationId] = useState<string | null>(null);
-
-  useEffect(() => {
-    const fetchMessages = async () => {
-      try {
-        const res = await api.get(`/messages/${conversationId}`);
-        setMessages(res.data.data);
-      } catch (err) {
-        console.error("Error fetching messages:", err);
-      }
-    };
-    if (conversationId) {
-      fetchMessages();
-    }
-  }, [conversationId]);
 
   return (
     <>
@@ -86,7 +70,6 @@ const HomePage = () => {
               <ToggleTheme />
             </div>
             <SearchBar
-              setMessages={setMessages}
               setConversationId={setConversationId}
             />
           </div>
@@ -101,7 +84,6 @@ const HomePage = () => {
           {/* style={{ backgroundColor: "#1f2937" }} */}
           <div>
             <MessagePanel
-              messages={messages}
               conversationId={conversationId}
             ></MessagePanel>
           </div>

@@ -10,12 +10,10 @@ import {
 } from "@mui/material";
 import api from "@/lib/axios";
 import type { User } from "@/types/user";
-import type { Message } from "@/types/message";
 
 const SearchBar: React.FC<{
-  setMessages: React.Dispatch<React.SetStateAction<Message[]>>;
   setConversationId: React.Dispatch<React.SetStateAction<string | null>>;
-}> = ({ setMessages, setConversationId }) => {
+}> = ({ setConversationId }) => {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<User[]>([]);
   const [loading, setLoading] = useState(false);
@@ -84,10 +82,6 @@ const SearchBar: React.FC<{
       const conversationId = convRes.data.data._id;
       setConversationId(conversationId);
       
-      const messagesRes = await api.get(
-        `/messages/${conversationId}`
-      );
-      setMessages(messagesRes.data);
     } catch (err) {
       console.error("Error loading conversation:", err);
     }

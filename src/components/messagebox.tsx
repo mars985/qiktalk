@@ -1,6 +1,7 @@
 import React, { useRef, useState } from "react";
-import api from "@/lib/axios";
+// import api from "@/lib/axios";
 import useUser from "@/hooks/useUser";
+import socket from "@/lib/socket";
 
 const MessageBox: React.FC<{ conversationId: string | null }> = ({
   conversationId,
@@ -27,17 +28,17 @@ const MessageBox: React.FC<{ conversationId: string | null }> = ({
   };
 
   const sendMessage = async () => {
-    if (!text.trim()) return;
+    if (!text.trim() || !conversationId || !user) return;
     // if(!conversationId) return;
 
     try {
       if (!text.replace(/\s/g, "").length) return;
-      await api.post("/sendMessage", {
+      socket.emit("sendMessage", {
         message: text,
         conversationId,
         senderId: user?._id,
       });
-
+      
       setText("");
       handleInput();
     } catch (err) {

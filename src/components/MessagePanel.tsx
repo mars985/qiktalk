@@ -1,22 +1,55 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import MessageTile from "./MessageTile";
 import MessageBox from "./MessageBox";
 
 import useUser from "@/hooks/useUser";
 import type { Message } from "@/types/message";
+import api from "@/lib/axios";
+import socket from "@/lib/socket";
 
 const MessagePanel: React.FC<{
-  messages: Message[];
   conversationId: string | null;
-}> = ({ messages, conversationId }) => {
+}> = ({ conversationId }) => {
+  const [messages, setMessages] = useState<Message[]>([]);
   const containerRef = useRef<HTMLDivElement>(null);
   const { user } = useUser();
 
   useEffect(() => {
+    if(!conversationId) return;
+    
+    socket.emit("joinConversation", conversationId);
+
+    socket.on("newMessage", (message: Message) => {
+      setMessages((prev) => [...prev, message]);
+      scrollToBottom();
+    });
+
+    return () => {
+      socket.emit("leaveConversation", conversationId);
+      socket.off("newMessage");
+    };
+  }, [conversationId]);
+
+  useEffect(() => {
+    const fetchMessages = async () => {
+      try {
+        const res = await api.get(`/messages/${conversationId}`);
+        setMessages(res.data.data);
+        scrollToBottom();
+      } catch (err) {
+        console.error("Error fetching messages:", err);
+      }
+    };
+    if (conversationId) {
+      fetchMessages();
+    }
+  }, [conversationId]);
+
+  const scrollToBottom = () => {
     if (containerRef.current) {
       containerRef.current.scrollTop = containerRef.current.scrollHeight;
     }
-  }, [messages]);
+  };
 
   return (
     <div>
@@ -35,7 +68,7 @@ const MessagePanel: React.FC<{
             const isOwn = user ? message.sender._id === user._id : false;
             return (
               <div
-                key={message._id} // use _id instead of id if that’s what your backend sends
+                key={message._id}
                 className={`flex ${isOwn ? "justify-end" : "justify-start"}`}
               >
                 <MessageTile message={message} isOwn={isOwn} />

@@ -1,39 +1,64 @@
 import React from "react";
 import type { Message } from "../types/message";
 
+function getTimestampFromObjectId(objectId: string) {
+  if (!objectId || objectId.length < 8) return null;
+  try {
+    const timestamp = parseInt(objectId.substring(0, 8), 16);
+    return new Date(timestamp * 1000);
+  } catch {
+    return null;
+  }
+}
+
 const MessageTile: React.FC<{ message: Message; isOwn: boolean }> = ({
   message,
   isOwn,
-}) => (
-  <div
-    className={`${
-      isOwn
-        ? "bg-[#dcf8c6] dark:bg-[#056162]"
-        : "bg-[#f1f0f0] dark:bg-[#262d31]"
-    } text-black dark:text-gray-200 
-    border-b border-[#eee] dark:border-[#1f1f1f]
-    shadow-[0_2px_3px_rgba(0,0,0,0.1)] dark:shadow-[0_2px_3px_rgba(0,0,0,0.4)]`}
-    style={{
-      padding: "8px 12px",
-      display: "flex",
-      flexDirection: "column",
-      maxWidth: "75%",
-      borderRadius: "12px",
-      wordBreak: "break-word",
-      alignItems: isOwn ? "flex-end" : "flex-start",
-      whiteSpace: "pre-wrap",
-      // fontFamily: "monospace",
-    }}
-  >
-    {isOwn ? (
-      <span className="text-xs text-[#555] dark:text-gray-400">You</span>
-    ) : (
-      <span className="text-sm text-[#555] dark:text-gray-400">
-        {message.sender.username}
-      </span>
-    )}
-    <span className="text-base">{message.body}</span>
-  </div>
-);
+}) => {
+  const date = getTimestampFromObjectId(message._id);
+  const timeString = date
+    ? date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
+    : "";
+
+  return (
+    <div
+      className={`${
+        isOwn
+          ? "bg-[#dcf8c6] dark:bg-[#056162]"
+          : "bg-[#f1f0f0] dark:bg-[#262d31]"
+      } text-black dark:text-gray-200 
+      border-b border-[#eee] dark:border-[#1f1f1f]
+      shadow-[0_2px_3px_rgba(0,0,0,0.1)] dark:shadow-[0_2px_3px_rgba(0,0,0,0.4)]`}
+      style={{
+        padding: "8px 12px",
+        display: "flex",
+        flexDirection: "column",
+        maxWidth: "75%",
+        borderRadius: "12px",
+        wordBreak: "break-word",
+        alignItems: isOwn ? "flex-end" : "flex-start",
+        whiteSpace: "pre-wrap",
+      }}
+    >
+      {isOwn ? (
+        <span className="text-xs text-[#555] dark:text-gray-400">You</span>
+      ) : (
+        <span className="text-sm text-[#555] dark:text-gray-400">
+          {message.sender.username}
+        </span>
+      )}
+
+      {/* Message body + timestamp */}
+      <div className="flex items-end gap-1">
+        <span className="text-base">{message.body}</span>
+        {timeString && (
+          <span className="text-[10px] text-gray-500 dark:text-gray-400">
+            {timeString}
+          </span>
+        )}
+      </div>
+    </div>
+  );
+};
 
 export default MessageTile;
