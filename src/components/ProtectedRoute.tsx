@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import api from "../../lib/axios";
+import api from "@/lib/axios";
 import useUser from "@/hooks/useUser";
 
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({

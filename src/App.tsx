@@ -5,10 +5,10 @@ import socket from "./lib/socket";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import { UserProvider } from "@/contexts/UserContext";
 
-import ProtectedRoute from "./components/ui/protectedroute";
 import SignupPage from "./pages/SignupPage";
 import LoginPage from "./pages/LoginPage";
 import HomePage from "./pages/HomePage";
+import ProtectedRoute from "@/components/ProtectedRoute";
 
 export default function App() {
   useEffect(() => {

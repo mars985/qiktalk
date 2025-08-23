@@ -25,7 +25,7 @@ const MessagePanel: React.FC<{
     });
 
     return () => {
-      socket.emit("leaveConversation", conversationId);
+      // socket.emit("leaveConversation", conversationId);
       socket.off("newMessage");
     };
   }, [conversationId]);
