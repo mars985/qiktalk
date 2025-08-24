@@ -1,4 +1,7 @@
 import React, { useRef, useState } from "react";
+
+import { Button } from "./ui/button";
+
 import useUser from "@/hooks/useUser";
 import socket from "@/lib/socket";
 
@@ -44,43 +47,47 @@ const MessageBox: React.FC<{ conversationId: string | null }> = ({
   };
 
   return (
-    <div className="p-3 border-t border-gray-200 dark:border-gray-700">
-      <div
+    <div
+      className="border-t border-gray-200 dark:border-neutral-700"
+      style={{
+        display: "flex",
+        flexDirection:"row",
+        alignItems: "center",
+        gap: "8px",
+        padding: "12px",
+        justifyContent:"center"
+      }}
+    >
+      <textarea
+        ref={textareaRef}
+        name="sendMessage"
+        placeholder="Type a message..."
+        rows={3}
+        value={text}
+        onChange={(e) => setText(e.target.value)}
+        onInput={handleInput}
+        onKeyDown={handleKeyDown}
+        style={{
+          width: "90%",
+          minHeight: "72px",
+          maxHeight: "120px",
+          padding: "12px",
+          resize: "none",
+          lineHeight: "1.5",
+          overflow: "hidden",
+        }}
         className="
-          flex items-end gap-2 px-3 py-2 rounded-md shadow 
+          outline-none
           bg-gray-100 dark:bg-gray-800
-          focus-within:ring-2 focus-within:ring-blue-500
+          text-gray-900 dark:text-gray-100
+          placeholder-gray-400 dark:placeholder-gray-500
+          rounded-md
+          text-sm
         "
-      >
-        <textarea
-          ref={textareaRef}
-          name="sendMessage"
-          placeholder="Type a message..."
-          rows={3}
-          value={text}
-          onChange={(e) => setText(e.target.value)}
-          onInput={handleInput}
-          onKeyDown={handleKeyDown}
-          className="
-            flex-1 resize-none outline-none bg-transparent
-            text-gray-900 dark:text-gray-100
-            placeholder-gray-400 dark:placeholder-gray-500
-            text-sm leading-relaxed
-            max-h-32 min-h-[72px] overflow-hidden
-          "
-        />
-      </div>
-      {/* <button
-        onClick={sendMessage}
-        disabled={!text.trim()}
-        className="
-            w-16 h-[42px] flex items-center justify-center
-            rounded-md text-sm font-medium transition-colors
-            bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50
-          "
-      >
+      />
+      <Button variant={text.trim() ? "default" : "ghost"} onClick={sendMessage}>
         Send
-      </button> */}
+      </Button>
     </div>
   );
 };
