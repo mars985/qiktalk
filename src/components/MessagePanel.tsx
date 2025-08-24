@@ -37,7 +37,6 @@ const MessagePanel: React.FC<{ conversationId: string | null }> = ({
 
     const handleNewMessage = (msg: Message) => {
       setMessages((prev) => [...prev, msg]);
-      scrollToBottom();
     };
 
     socket.on("newMessage", handleNewMessage);
@@ -47,55 +46,69 @@ const MessagePanel: React.FC<{ conversationId: string | null }> = ({
     };
   }, [conversationId]);
 
-  // fetch conversation history
   useEffect(() => {
     if (!conversationId) return;
 
-    (async () => {
+    const fetchMessages = async () => {
       try {
         const res = await api.get(`/messages/${conversationId}`);
         setMessages(res.data.data);
-        scrollToBottom();
+
+        requestAnimationFrame(() => {
+          containerRef.current?.scrollTo({
+            top: containerRef.current.scrollHeight,
+            behavior: "auto",
+          });
+        });
       } catch (err) {
         console.error("Error fetching messages:", err);
       }
-    })();
+    };
+
+    fetchMessages();
   }, [conversationId]);
 
-  const scrollToBottom = () => {
+  useEffect(() => {
+    if (!messages.length) return;
+
     containerRef.current?.scrollTo({
       top: containerRef.current.scrollHeight,
       behavior: "smooth",
     });
-  };
+  }, [messages]);
 
-  // --- rendering ---
   const renderMessages = () => {
     if (!messages.length)
       return (
         <div className="text-center text-gray-500 py-6">No messages found.</div>
       );
 
-    let lastDate: string | null = null;
+    // newest -> oldest (so first DOM child is the newest)
+    const reversed = [...messages].reverse();
 
-    return messages.map((message, idx) => {
+    return reversed.map((message, idx) => {
       const messageDate = formatDate(message._id);
-      const showDate = lastDate !== messageDate;
       const isOwn = user?._id === message.sender._id;
-      lastDate = messageDate;
+
+      // in reversed order, the "next" item is older
+      const next = reversed[idx + 1];
+      const nextDate = next ? formatDate(next._id) : null;
+
+      // render the divider AFTER the last message of this date
+      const showDividerAfter = messageDate !== nextDate;
 
       return (
         <React.Fragment key={message._id}>
-          {showDate && <DateDivider date={messageDate} />}
-
           <div
             data-date={messageDate}
             className={`message-wrapper flex ${
               isOwn ? "justify-end" : "justify-start"
-            } ${idx === messages.length - 1 ? "pb-6" : ""}`}
+            } ${idx === 0 ? "pb-6" : ""}`} // bottom padding for the very bottom-most (newest) item
           >
             <MessageTile message={message} isOwn={isOwn} />
           </div>
+
+          {showDividerAfter && <DateDivider date={messageDate} />}
         </React.Fragment>
       );
     });
@@ -105,7 +118,7 @@ const MessagePanel: React.FC<{ conversationId: string | null }> = ({
     <div className="flex flex-col relative">
       <div
         ref={containerRef}
-        className="messages-list h-[80vh] overflow-y-auto px-4 flex flex-col gap-2"
+        className="messages-list h-[80vh] overflow-y-auto px-4 flex flex-col-reverse gap-2"
       >
         {renderMessages()}
       </div>

@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-import useConversations from "../hooks/useConversations";
+import useConversations from "@/hooks/useConversations";
 import useUser from "@/hooks/useUser";
 
 import ConversationTile from "./ConversationTile";
@@ -45,7 +45,6 @@ const ConversationsList: React.FC<{
           conv={conv}
           user={user}
           onSelect={setConversationId}
-          theme="dark"
         />
       ))}
     </ul>

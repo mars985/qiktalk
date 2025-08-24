@@ -31,9 +31,7 @@ const SideBar: React.FC<{
         >
           <Avatar sx={{ bgcolor: deepOrange[500], scale: 2 }}>M</Avatar>
         </div>
-        <div className="text-xl">
-          <h1>{user?.username || "Welcome"}</h1>
-        </div>
+        <h1 className="text-xl">{user?.username || "Welcome"}</h1>
         <div
           style={{
             display: "flex",
@@ -47,7 +45,9 @@ const SideBar: React.FC<{
           <div className="w-2" />
           <ToggleTheme />
         </div>
-        <SearchBar setConversationId={setConversationId} />
+        <div style={{ padding: 20 }}>
+          <SearchBar setConversationId={setConversationId} />
+        </div>
       </div>
       <div className="flex-1 overflow-y-auto">
         <ConversationsList setConversationId={setConversationId} />

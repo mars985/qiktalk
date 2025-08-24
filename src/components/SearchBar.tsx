@@ -1,13 +1,4 @@
 import React, { useState, useEffect, useRef } from "react";
-import {
-  TextField,
-  Paper,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemText,
-  CircularProgress,
-} from "@mui/material";
 import api from "@/lib/axios";
 import type { User } from "@/types/user";
 
@@ -32,6 +23,7 @@ const SearchBar: React.FC<{
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
+
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
@@ -78,53 +70,63 @@ const SearchBar: React.FC<{
     setOpen(false);
     try {
       const convRes = await api.post("/createDM", { targetUserId: _id });
-      // console.log(convRes);
       const conversationId = convRes.data.data._id;
       setConversationId(conversationId);
-      
     } catch (err) {
       console.error("Error loading conversation:", err);
     }
   };
 
   return (
-    <div ref={wrapperRef} style={{ position: "relative", width: "300px" }}>
-      <TextField
-        fullWidth
-        size="small"
-        placeholder="Search usernames..."
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
-        InputProps={{
-          endAdornment: loading && (
-            <CircularProgress size={18} style={{ marginRight: 4 }} />
-          ),
-        }}
-      />
+    <div ref={wrapperRef} className="relative w-72">
+      {/* Input wrapper */}
+      <div
+        className="
+          flex items-center px-3 py-2 rounded-md shadow 
+          bg-gray-100 hover:bg-gray-200 transition-all
+          dark:bg-gray-800 dark:hover:bg-gray-700
+          focus-within:ring-2 focus-within:ring-blue-500
+        "
+      >
+        <input
+          type="text"
+          placeholder="Search usernames..."
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          className="
+            flex-1 bg-transparent outline-none text-sm 
+            placeholder-gray-400 dark:placeholder-gray-500
+            text-gray-900 dark:text-gray-100
+          "
+        />
+        {loading && (
+          <div className="w-4 h-4 border-2 border-gray-300 border-t-gray-600 rounded-full animate-spin ml-2" />
+        )}
+      </div>
 
+      {/* Dropdown */}
       {open && (
-        <Paper
-          style={{
-            position: "absolute",
-            top: "100%",
-            left: 0,
-            right: 0,
-            zIndex: 10,
-            maxHeight: 200,
-            overflowY: "auto",
-          }}
-          elevation={3}
+        <ul
+          className="
+            absolute left-0 right-0 mt-1 rounded-md shadow-md z-10 
+            max-h-52 overflow-y-auto border border-gray-200 dark:border-gray-700
+            bg-white dark:bg-gray-900
+          "
         >
-          <List dense>
-            {results.map((user) => (
-              <ListItem key={user._id} disablePadding>
-                <ListItemButton onClick={() => handleSelect(user._id)}>
-                  <ListItemText primary={user.username} />
-                </ListItemButton>
-              </ListItem>
-            ))}
-          </List>
-        </Paper>
+          {results.map((user) => (
+            <li
+              key={user._id}
+              onClick={() => handleSelect(user._id)}
+              className="
+                px-3 py-2 text-sm cursor-pointer transition-colors 
+                hover:bg-gray-100 dark:hover:bg-gray-800
+                text-gray-900 dark:text-gray-100
+              "
+            >
+              {user.username}
+            </li>
+          ))}
+        </ul>
       )}
     </div>
   );
