@@ -1,6 +1,4 @@
-import { useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
-import socket from "./lib/socket";
 
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import { UserProvider } from "@/contexts/UserContext";
@@ -11,10 +9,6 @@ import HomePage from "./pages/HomePage";
 import ProtectedRoute from "@/components/ProtectedRoute";
 
 export default function App() {
-  useEffect(() => {
-    socket.connect();
-  }, []);
-
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
       <Routes>

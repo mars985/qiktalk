@@ -23,7 +23,7 @@ const LoginPage = () => {
 
     try {
       const response = await api.post(
-        "http://localhost:3000/login",
+        "/login",
         {
           email,
           password,

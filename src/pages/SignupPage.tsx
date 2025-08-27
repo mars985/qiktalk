@@ -24,7 +24,7 @@ const SignupPage = () => {
 
     try {
       const response = await api.post(
-        "http://localhost:3000/createUser",
+        "/createUser",
         { email, password, username },
         { withCredentials: true }
       );

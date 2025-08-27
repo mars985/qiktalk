@@ -1,14 +1,27 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import api from "@/lib/axios";
+
 import useUser from "@/hooks/useUser";
+
+import api from "@/lib/axios";
+import socket from "@/lib/socket";
 
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
-  const { setUser } = useUser();
+  const { user, setUser } = useUser();
+
+  useEffect(() => {
+    if (user) {
+      socket.connect();
+
+      return () => {
+        socket.disconnect();
+      };
+    }
+  }, [user]);
 
   useEffect(() => {
     api
