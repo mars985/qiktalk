@@ -7,7 +7,7 @@ export function useConversations() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
+  const fetchConversations = async () => {
     api
       .get("/getConversations")
       .then((res) => {
@@ -20,9 +20,12 @@ export function useConversations() {
         setError(err.message || "Failed to load conversations");
         setLoading(false);
       });
+  }
+  useEffect(() => {
+    fetchConversations();
   }, []);
 
-  return { conversations, loading, error };
+  return { conversations, loading, error, refetchConversations: fetchConversations };
 }
 
 export default useConversations;

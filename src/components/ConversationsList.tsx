@@ -1,17 +1,32 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 import useConversations from "@/hooks/useConversations";
 import useUser from "@/hooks/useUser";
+
+import socket from "@/lib/socket";
 
 import ConversationTile from "./ConversationTile";
 
 const ConversationsList: React.FC<{
   setConversationId: React.Dispatch<React.SetStateAction<string | null>>;
 }> = ({ setConversationId }) => {
-  const { conversations, loading, error } = useConversations();
+  const { conversations, loading, error, refetchConversations } =
+    useConversations();
   const { user } = useUser();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const handleNewMessage = () => {
+      refetchConversations();
+    };
+
+    socket.on("newMessage", handleNewMessage);
+
+    return () => {
+      socket.off("newMessage", handleNewMessage);
+    };
+  }, [refetchConversations]);
 
   if (user === null) {
     navigate("/login");

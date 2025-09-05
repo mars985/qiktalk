@@ -16,7 +16,6 @@ HomePage
 
 ## TODO
 
-- conversation list socket
 - edit message
 - delete message
 - groups

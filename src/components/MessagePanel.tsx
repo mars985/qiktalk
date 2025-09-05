@@ -1,7 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
+
 import MessageTile from "./MessageTile";
 import MessageBox from "./MessageBox";
 import DateDivider from "./DateDivider";
+import ChatHeader from "./ChatHeader";
 
 import useUser from "@/hooks/useUser";
 import type { Message } from "@/types/message";
@@ -46,6 +48,7 @@ const MessagePanel: React.FC<{ conversationId: string | null }> = ({
     };
   }, [conversationId]);
 
+  // initial fetch
   useEffect(() => {
     if (!conversationId) return;
 
@@ -68,6 +71,7 @@ const MessagePanel: React.FC<{ conversationId: string | null }> = ({
     fetchMessages();
   }, [conversationId]);
 
+  // scroll to bottom on new message
   useEffect(() => {
     if (!messages.length) return;
 
@@ -116,9 +120,10 @@ const MessagePanel: React.FC<{ conversationId: string | null }> = ({
 
   return (
     <div className="flex flex-col relative">
+      <ChatHeader conversationId={conversationId} />
       <div
         ref={containerRef}
-        className="messages-list h-[80vh] overflow-y-auto px-4 flex flex-col-reverse gap-2"
+        className="h-[80vh] overflow-y-auto px-4 flex flex-col-reverse gap-2"
       >
         {renderMessages()}
       </div>

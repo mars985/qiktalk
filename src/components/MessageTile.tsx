@@ -22,13 +22,16 @@ const MessageTile: React.FC<{ message: Message; isOwn: boolean }> = ({
 
   return (
     <div
-      className={`${
-        isOwn
-          ? "bg-[#dcf8c6] dark:bg-[#056162]"
-          : "bg-[#f1f0f0] dark:bg-[#262d31]"
-      } text-black dark:text-gray-200 
-      border-b border-[#eee] dark:border-[#1f1f1f]
-      shadow-[0_2px_3px_rgba(0,0,0,0.1)] dark:shadow-[0_2px_3px_rgba(0,0,0,0.4)]`}
+      className={`
+        ${
+          isOwn
+            ? "bg-green-100 dark:bg-emerald-900"
+            : "bg-gray-100 dark:bg-gray-800"
+        }
+        text-black dark:text-gray-200
+        border-b border-gray-200 dark:border-gray-900
+        shadow-sm dark:shadow-md
+      `}
       style={{
         padding: "8px 12px",
         display: "flex",
