@@ -84,7 +84,7 @@ const MessagePanel: React.FC<{ conversationId: string | null }> = ({
   const renderMessages = () => {
     if (!messages.length)
       return (
-        <div className="text-center text-gray-500 py-6">No messages found.</div>
+        <div className="text-center text-base-content/60 py-6">No messages found.</div>
       );
 
     // newest -> oldest (so first DOM child is the newest)

@@ -9,7 +9,11 @@ interface ConversationTileProps {
   onSelect: (id: string) => void;
 }
 
-const ConversationTile: React.FC<ConversationTileProps> = ({ conv, user, onSelect }) => {
+const ConversationTile: React.FC<ConversationTileProps> = ({
+  conv,
+  user,
+  onSelect,
+}) => {
   const lastMessage = conv.messages.at(-1);
   const participants = conv.participants
     .filter((p) => p._id !== user._id)
@@ -18,10 +22,10 @@ const ConversationTile: React.FC<ConversationTileProps> = ({ conv, user, onSelec
   return (
     <li
       className="
-        p-4 sm:p-3 md:p-4 rounded-md shadow cursor-pointer 
-        transition-all duration-200 
-        bg-gray-100 hover:bg-gray-200
-        dark:bg-gray-800 dark:hover:bg-gray-700"
+        p-4 sm:p-3 md:p-4 rounded-lg shadow cursor-pointer
+        transition-all duration-200
+        bg-base-200 hover:bg-base-300
+      "
       onClick={() => onSelect(conv._id)}
     >
       <div className="font-medium">
@@ -31,7 +35,7 @@ const ConversationTile: React.FC<ConversationTileProps> = ({ conv, user, onSelec
           ? participants.join(", ")
           : "No participants"}
       </div>
-      <div className="text-sm text-gray-600 dark:text-gray-400 truncate">
+      <div className="text-sm text-base-content/70 truncate">
         {lastMessage?.body || "No messages yet"}
       </div>
     </li>

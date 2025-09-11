@@ -82,10 +82,9 @@ const SearchBar: React.FC<{
       {/* Input wrapper */}
       <div
         className="
-          flex items-center px-3 py-2 rounded-md shadow 
-          bg-gray-100 hover:bg-gray-200 transition-all
-          dark:bg-gray-800 dark:hover:bg-gray-700
-          focus-within:ring-2 focus-within:ring-blue-500
+          flex items-center px-3 py-2 rounded-md shadow
+          bg-base-200 hover:bg-base-300 transition-all
+          focus-within:ring-2 focus-within:ring-primary
         "
       >
         <input
@@ -94,13 +93,13 @@ const SearchBar: React.FC<{
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           className="
-            flex-1 bg-transparent outline-none text-sm 
-            placeholder-gray-400 dark:placeholder-gray-500
-            text-gray-900 dark:text-gray-100
+            flex-1 bg-transparent outline-none text-sm
+            placeholder:text-base-content/50
+            text-base-content
           "
         />
         {loading && (
-          <div className="w-4 h-4 border-2 border-gray-300 border-t-gray-600 rounded-full animate-spin ml-2" />
+          <div className="w-4 h-4 border-2 border-base-300 border-t-base-content rounded-full animate-spin ml-2" />
         )}
       </div>
 
@@ -108,9 +107,9 @@ const SearchBar: React.FC<{
       {open && (
         <ul
           className="
-            absolute left-0 right-0 mt-1 rounded-md shadow-md z-10 
-            max-h-52 overflow-y-auto border border-gray-200 dark:border-gray-700
-            bg-white dark:bg-gray-900
+            absolute left-0 right-0 mt-1 rounded-md shadow-md z-10
+            max-h-52 overflow-y-auto border border-base-300
+            bg-base-100
           "
         >
           {results.map((user) => (
@@ -118,9 +117,9 @@ const SearchBar: React.FC<{
               key={user._id}
               onClick={() => handleSelect(user._id)}
               className="
-                px-3 py-2 text-sm cursor-pointer transition-colors 
-                hover:bg-gray-100 dark:hover:bg-gray-800
-                text-gray-900 dark:text-gray-100
+                px-3 py-2 text-sm cursor-pointer transition-colors
+                hover:bg-base-200
+                text-base-content
               "
             >
               {user.username}

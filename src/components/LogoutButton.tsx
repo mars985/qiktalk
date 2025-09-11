@@ -1,20 +1,19 @@
 import { useNavigate } from "react-router-dom";
 
 import api from "@/lib/axios";
-import { Button } from "./ui/button";
 
 const LogoutButton: React.FC = () => {
   const navigate = useNavigate();
   return (
-    <Button
-      variant={"secondary"}
+    <button
+      className="btn btn-xs sm:btn-sm md:btn-md"
       onClick={() => {
         api.get("/logout");
         navigate("/login");
       }}
     >
       Logout
-    </Button>
+    </button>
   );
 };
 

@@ -32,9 +32,9 @@ const ChatHeader: React.FC<{
   const otherUsers = users.filter((u) => u._id !== user?._id);
 
   return (
-    <div className="flex flex-row items-center px-4 gap-2 h-16 w-full border-b border-gray-200 dark:border-neutral-700">
+    <div className="flex flex-row items-center px-4 gap-2 h-16 w-full border-b border-base-300">
       {loading ? (
-        <span className="text-gray-500">Loading...</span>
+        <span className="text-base-content/60">Loading...</span>
       ) : otherUsers.length > 0 ? (
         <>
           {otherUsers.length > 2 ? (
@@ -51,14 +51,15 @@ const ChatHeader: React.FC<{
           ) : (
             <div className="flex flex-col h-full justify-center">
               <span>{otherUsers[0].username}</span>
-              <span className="text-gray-600 text-sm dark:text-gray-400">
+              <span className="text-base-content/60">
                 last seen yesterday
               </span>
+              {/* <div className="btn btn-primary">DaisyUI Test</div> */}
             </div>
           )}
         </>
       ) : (
-        <span className="text-gray-500">No users</span>
+        <span className="text-base-content/60">No users</span>
       )}
     </div>
   );

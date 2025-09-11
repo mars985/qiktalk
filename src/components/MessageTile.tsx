@@ -25,12 +25,10 @@ const MessageTile: React.FC<{ message: Message; isOwn: boolean }> = ({
       className={`
         ${
           isOwn
-            ? "bg-green-100 dark:bg-emerald-900"
-            : "bg-gray-100 dark:bg-gray-800"
+            ? "bg-primary/20 text-primary-content"
+            : "bg-base-200 text-base-content"
         }
-        text-black dark:text-gray-200
-        border-b border-gray-200 dark:border-gray-900
-        shadow-sm dark:shadow-md
+        shadow-sm
       `}
       style={{
         padding: "8px 12px",
@@ -44,9 +42,9 @@ const MessageTile: React.FC<{ message: Message; isOwn: boolean }> = ({
       }}
     >
       {isOwn ? (
-        <span className="text-xs text-[#555] dark:text-gray-400">You</span>
+        <span className="text-xs text-base-content/70">You</span>
       ) : (
-        <span className="text-sm text-[#555] dark:text-gray-400">
+        <span className="text-sm text-base-content/70">
           {message.sender.username}
         </span>
       )}
@@ -55,9 +53,7 @@ const MessageTile: React.FC<{ message: Message; isOwn: boolean }> = ({
       <div className="flex items-end gap-1">
         <span className="text-base">{message.body}</span>
         {timeString && (
-          <span className="text-[10px] text-gray-500 dark:text-gray-400">
-            {timeString}
-          </span>
+          <span className="text-[10px] text-base-content/60">{timeString}</span>
         )}
       </div>
     </div>

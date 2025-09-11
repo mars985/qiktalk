@@ -3,7 +3,7 @@ import { deepOrange } from "@mui/material/colors";
 
 import ConversationsList from "@/components/ConversationsList";
 import LogoutButton from "@/components/LogoutButton";
-import ToggleTheme from "@/components/ToggleTheme";
+// import ToggleTheme from "@/components/ToggleTheme";
 import SearchBar from "@/components/SearchBar";
 
 import useUser from "@/hooks/useUser";
@@ -43,7 +43,7 @@ const SideBar: React.FC<{
         >
           <LogoutButton />
           <div className="w-2" />
-          <ToggleTheme />
+          {/* <ToggleTheme /> */}
         </div>
         <div style={{ padding: 20 }}>
           <SearchBar setConversationId={setConversationId} />

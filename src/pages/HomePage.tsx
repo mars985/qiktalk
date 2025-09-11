@@ -19,7 +19,7 @@ const HomePage = () => {
           <SideBar setConversationId={setConversationId} />
         </ResizablePanel>
 
-        <ResizableHandle />
+        <ResizableHandle className="bg-base-300"/>
 
         <ResizablePanel>
             <MessagePanel conversationId={conversationId} />
