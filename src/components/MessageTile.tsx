@@ -25,10 +25,10 @@ const MessageTile: React.FC<{ message: Message; isOwn: boolean }> = ({
       className={`
         ${
           isOwn
-            ? "bg-primary/20 text-primary-content"
-            : "bg-base-200 text-base-content"
+            ? "bg-primary/20"
+            : "bg-base-200"
         }
-        shadow-sm
+        text-base-content shadow-sm
       `}
       style={{
         padding: "8px 12px",
