@@ -19,3 +19,11 @@ HomePage
 - edit message
 - delete message
 - groups
+
+## flow
+
+### conversations list updates when
+
+- new message
+- group creation
+- dm creation (at least one message sent)
