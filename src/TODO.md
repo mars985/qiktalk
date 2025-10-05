@@ -20,10 +20,6 @@ HomePage
 - delete message
 - groups
 
-## flow
+## UI
 
-### conversations list updates when
-
-- new message
-- group creation
-- dm creation (at least one message sent)
+- 

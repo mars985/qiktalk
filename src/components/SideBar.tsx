@@ -1,12 +1,10 @@
-import { Avatar } from "@mui/material";
-import { deepOrange } from "@mui/material/colors";
-
 import ConversationsList from "@/components/ConversationsList";
 import LogoutButton from "@/components/LogoutButton";
 import ToggleTheme from "@/components/ToggleTheme";
-import SearchBar from "@/components/SearchBar";
+// import SearchBar from "@/components/SearchBar";
 
 import useUser from "@/hooks/useUser";
+import NewChatDropdown from "./NewChatDropdown";
 
 const SideBar: React.FC<{
   setConversationId: React.Dispatch<React.SetStateAction<string | null>>;
@@ -29,7 +27,13 @@ const SideBar: React.FC<{
             height: 120,
           }}
         >
-          <Avatar sx={{ bgcolor: deepOrange[500], scale: 2 }}>M</Avatar>
+          <div className="avatar avatar-placeholder scale-150">
+            <div className="bg-secondary text-primary-content rounded-full w-12 flex items-center justify-center">
+              <span className="text-lg font-semibold">
+                {user?.username?.[0]?.toUpperCase() || "U"}
+              </span>
+            </div>
+          </div>
         </div>
         <h1 className="text-xl">{user?.username || "Welcome"}</h1>
         <div
@@ -44,10 +48,15 @@ const SideBar: React.FC<{
           <LogoutButton />
           <div className="w-2" />
           <ToggleTheme />
+          <div className="w-2" />
+          <NewChatDropdown
+            onNewChat={(conversationId) => setConversationId(conversationId)}
+            onNewGroup={(conversationId) => setConversationId(conversationId)}
+          />
         </div>
-        <div style={{ padding: 20 }}>
-          <SearchBar setConversationId={setConversationId} />
-        </div>
+        {/* <div style={{ padding: 20 }}>
+          <SearchBar />
+        </div> */}
       </div>
       <div className="flex-1 overflow-y-auto">
         <ConversationsList setConversationId={setConversationId} />

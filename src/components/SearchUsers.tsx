@@ -2,9 +2,12 @@ import React, { useState, useEffect, useRef } from "react";
 import api from "@/lib/axios";
 import type { User } from "@/types/user";
 
-const SearchBar: React.FC<{
-  setConversationId: React.Dispatch<React.SetStateAction<string | null>>;
-}> = ({ setConversationId }) => {
+interface SearchBarProps {
+  onSelectUser: (user: User) => void;
+  placeholder?: string;
+}
+
+const SearchBar: React.FC<SearchBarProps> = ({ onSelectUser, placeholder }) => {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<User[]>([]);
   const [loading, setLoading] = useState(false);
@@ -15,15 +18,11 @@ const SearchBar: React.FC<{
   // Close dropdown on outside click
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (
-        wrapperRef.current &&
-        !wrapperRef.current.contains(event.target as Node)
-      ) {
+      if (wrapperRef.current && !wrapperRef.current.contains(event.target as Node)) {
         setOpen(false);
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
-
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
@@ -50,9 +49,7 @@ const SearchBar: React.FC<{
   const searchUsernames = async (searchString: string) => {
     try {
       setLoading(true);
-      const res = await api.get("/searchUsernames", {
-        params: { searchString },
-      });
+      const res = await api.get("/searchUsernames", { params: { searchString } });
       setResults(res.data.data);
       setOpen(res.data.data.length > 0);
     } catch (error) {
@@ -64,17 +61,11 @@ const SearchBar: React.FC<{
     }
   };
 
-  const handleSelect = async (_id: string) => {
+  const handleSelect = (user: User) => {
     setSkipSearch(true);
     setQuery("");
     setOpen(false);
-    try {
-      const convRes = await api.post("/createDM", { targetUserId: _id });
-      const conversationId = convRes.data.data._id;
-      setConversationId(conversationId);
-    } catch (err) {
-      console.error("Error loading conversation:", err);
-    }
+    onSelectUser(user);
   };
 
   return (
@@ -84,12 +75,12 @@ const SearchBar: React.FC<{
         className="
           flex items-center px-3 py-2 rounded-md shadow
           bg-base-200 hover:bg-base-300 transition-all
-          focus-within:ring-2 focus-within:ring-primary
+          focus-within:ring-2 focus-within:ring-secondary
         "
       >
         <input
           type="text"
-          placeholder="Search usernames..."
+          placeholder={placeholder || "Search..."}
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           className="
@@ -115,7 +106,7 @@ const SearchBar: React.FC<{
           {results.map((user) => (
             <li
               key={user._id}
-              onClick={() => handleSelect(user._id)}
+              onClick={() => handleSelect(user)}
               className="
                 px-3 py-2 text-sm cursor-pointer transition-colors
                 hover:bg-base-200
@@ -132,5 +123,3 @@ const SearchBar: React.FC<{
 };
 
 export default SearchBar;
-
-// TODO: works only for DMs. add searching and selecting for group chats

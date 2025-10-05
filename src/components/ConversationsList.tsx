@@ -17,14 +17,16 @@ const ConversationsList: React.FC<{
   const navigate = useNavigate();
 
   useEffect(() => {
-    const handleNewMessage = () => {
+    const refetch = () => {
       refetchConversations();
     };
 
-    socket.on("newMessage", handleNewMessage);
+    socket.on("newMessage", refetch);
+    socket.on("newGroup", refetch);
 
     return () => {
-      socket.off("newMessage", handleNewMessage);
+      socket.off("newMessage", refetch);
+      socket.off("newGroup", refetch);
     };
   }, [refetchConversations]);
 
@@ -36,7 +38,7 @@ const ConversationsList: React.FC<{
   if (error) return <div>Error: {error}</div>;
 
   const filteredConversations = conversations.filter((conv) => {
-    if (!conv.messages?.length) return false;
+    if (!conv.messages?.length && conv.type=="dm") return false;
     return (
       conv.type === "group" || conv.participants.some((p) => p._id !== user._id)
     );

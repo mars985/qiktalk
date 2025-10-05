@@ -1,65 +1,77 @@
 import { useEffect, useState } from "react";
-import api from "@/lib/axios";
-import type { User } from "@/types/user";
-import useUser from "@/hooks/useUser";
 
-const ChatHeader: React.FC<{
-  conversationId: string | null;
-}> = ({ conversationId }) => {
+import ConversationAvatar from "./ConversationAvatar";
+
+import api from "@/lib/axios";
+import useUser from "@/hooks/useUser";
+import type { User } from "@/types/user";
+
+interface Conversation {
+  _id: string;
+  type: "dm" | "group";
+  groupName: string | null;
+  participants: User[];
+}
+
+const ChatHeader: React.FC<{ conversationId: string | null }> = ({
+  conversationId,
+}) => {
   const { user } = useUser();
-  const [users, setUsers] = useState<User[]>([]);
+  const [conversation, setConversation] = useState<Conversation | null>(null);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (!conversationId) return;
 
-    const fetchUsers = async () => {
+    const fetchConversation = async () => {
       try {
         setLoading(true);
-        const res = await api.get(`/${conversationId}/user`);
-        setUsers(res.data);
+        const res = await api.get(`/${conversationId}`);
+        setConversation(res.data.data);
       } catch (err) {
-        console.error("Failed to fetch users:", err);
+        console.error("Failed to fetch conversation:", err);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchUsers();
+    fetchConversation();
   }, [conversationId]);
 
-  // exclude current user
-  const otherUsers = users.filter((u) => u._id !== user?._id);
+  const otherUsers =
+    conversation?.participants.filter((u) => u._id !== user?._id) ?? [];
 
   return (
-    <div className="flex flex-row items-center px-4 gap-2 h-16 w-full border-b border-base-300">
+    <div className="flex flex-row items-center px-4 gap-3 h-16 w-full border-b border-base-300">
       {loading ? (
         <span className="text-base-content/60">Loading...</span>
-      ) : otherUsers.length > 0 ? (
+      ) : conversation ? (
         <>
-          {otherUsers.length > 2 ? (
-            otherUsers.map((u) => (
-              <div key={u._id} className="flex items-center gap-2">
-                {/* <img
-                  src={u.avatarUrl}
-                  alt={u.username}
-                  className="w-10 h-10 rounded-full object-cover"
-                /> */}
-                <span className="font-medium">{u.username}</span>
-              </div>
-            ))
-          ) : (
-            <div className="flex flex-col h-full justify-center">
-              <span>{otherUsers[0].username}</span>
-              <span className="text-base-content/60">
+          <ConversationAvatar
+            type={conversation.type}
+            otherUsers={otherUsers}
+          />
+
+          {conversation.type === "group" ? (
+            <div className="flex flex-col justify-center">
+              <span className="font-semibold">
+                {otherUsers.map((u) => u.username).join(", ")}
+              </span>
+              <span className="text-sm text-base-content/60">Group chat</span>
+            </div>
+          ) : conversation.type === "dm" ? (
+            <div className="flex flex-col justify-center">
+              <span className="font-medium">{otherUsers[0]?.username}</span>
+              <span className="text-sm text-base-content/60">
                 last seen yesterday
               </span>
-              {/* <div className="btn btn-primary">DaisyUI Test</div> */}
             </div>
+          ) : (
+            <span className="text-base-content/60">No users</span>
           )}
         </>
       ) : (
-        <span className="text-base-content/60">No users</span>
+        <span className="text-base-content/60">No conversation</span>
       )}
     </div>
   );

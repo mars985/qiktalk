@@ -20,7 +20,7 @@ const SignupPage = () => {
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault(); // prevent page reload
+    e.preventDefault();
 
     try {
       const response = await api.post(
@@ -36,35 +36,37 @@ const SignupPage = () => {
   };
 
   return (
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        height: "100vh",
-        backgroundColor: "beige",
-      }}
-    >
-      <Card className="w-full max-w-sm">
+    <div className="flex justify-center items-center h-screen bg-base-200">
+      <Card className="w-full max-w-sm shadow-lg bg-base-100">
         <CardHeader>
-          <CardTitle>Create your account</CardTitle>
+          <CardTitle className="text-lg font-bold text-base-content">
+            Create your account
+          </CardTitle>
           <CardAction onClick={() => (window.location.href = "/login")}>
-            <Button variant="link">Log in</Button>
+            <Button variant="link" className="text-primary">
+              Log in
+            </Button>
           </CardAction>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="flex flex-col gap-6">
             <div className="grid gap-2">
-              <Label htmlFor="username">Username</Label>
+              <Label htmlFor="username" className="text-base-content">
+                Username
+              </Label>
               <Input
                 id="username"
-                type="username"
+                type="text"
                 placeholder="abhi-del"
                 required
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
+                className="bg-base-200 text-base-content"
               />
-              <Label htmlFor="email">Email</Label>
+
+              <Label htmlFor="email" className="text-base-content">
+                Email
+              </Label>
               <Input
                 id="email"
                 type="email"
@@ -72,14 +74,18 @@ const SignupPage = () => {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                className="bg-base-200 text-base-content"
               />
             </div>
+
             <div className="grid gap-2">
               <div className="flex items-center">
-                <Label htmlFor="password">Password</Label>
+                <Label htmlFor="password" className="text-base-content">
+                  Password
+                </Label>
                 <a
                   href="#"
-                  className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
+                  className="ml-auto text-sm text-primary underline-offset-4 hover:underline"
                 >
                   Forgot your password?
                 </a>
@@ -90,9 +96,11 @@ const SignupPage = () => {
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                className="bg-base-200 text-base-content"
               />
             </div>
-            <Button type="submit" className="w-full">
+
+            <Button type="submit" className="w-full bg-primary text-primary-content">
               Sign up
             </Button>
           </form>
