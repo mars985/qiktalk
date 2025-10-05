@@ -17,16 +17,13 @@ const ConversationsList: React.FC<{
   const navigate = useNavigate();
 
   useEffect(() => {
-    const refetch = () => {
-      refetchConversations();
-    };
 
-    socket.on("newMessage", refetch);
-    socket.on("newGroup", refetch);
+    socket.on("newConversation", refetchConversations);
+    socket.on("newMessage", refetchConversations);
 
     return () => {
-      socket.off("newMessage", refetch);
-      socket.off("newGroup", refetch);
+      socket.off("newConversation", refetchConversations);
+      socket.off("newMessage", refetchConversations);
     };
   }, [refetchConversations]);
 
@@ -38,10 +35,13 @@ const ConversationsList: React.FC<{
   if (error) return <div>Error: {error}</div>;
 
   const filteredConversations = conversations.filter((conv) => {
-    if (!conv.messages?.length && conv.type=="dm") return false;
-    return (
-      conv.type === "group" || conv.participants.some((p) => p._id !== user._id)
-    );
+    // Exclude DMs with no messages
+    if (conv.type === "dm" && (!conv.messages || conv.messages.length === 0)) {
+      return false;
+    }
+
+    // Keep all groups and all DMs that have messages
+    return true;
   });
 
   if (filteredConversations.length === 0) {

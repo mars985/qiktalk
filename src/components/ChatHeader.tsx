@@ -54,10 +54,8 @@ const ChatHeader: React.FC<{ conversationId: string | null }> = ({
 
           {conversation.type === "group" ? (
             <div className="flex flex-col justify-center">
-              <span className="font-semibold">
-                {otherUsers.map((u) => u.username).join(", ")}
-              </span>
-              <span className="text-sm text-base-content/60">Group chat</span>
+              <span className="font-semibold">{conversation.groupName}</span>
+              <span className="text-sm text-base-content/60">{otherUsers.map((u) => u.username).join(", ")}</span>
             </div>
           ) : conversation.type === "dm" ? (
             <div className="flex flex-col justify-center">
