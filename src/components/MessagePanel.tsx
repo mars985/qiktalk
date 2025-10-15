@@ -31,12 +31,10 @@ const MessagePanel: React.FC<{ conversationId: string | null }> = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const { user } = useUser();
 
-  // join + listen for new messages
+  // listen for new messages
   useEffect(() => {
     if (!conversationId) return;
-
-    socket.emit("joinConversation", conversationId);
-
+    
     const handleNewMessage = (msg: Message) => {
       setMessages((prev) => [...prev, msg]);
     };

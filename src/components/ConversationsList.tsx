@@ -11,21 +11,24 @@ import ConversationTile from "./ConversationTile";
 const ConversationsList: React.FC<{
   setConversationId: React.Dispatch<React.SetStateAction<string | null>>;
 }> = ({ setConversationId }) => {
-  const { conversations, loading, error, refetchConversations } =
-    useConversations();
+  const {
+    conversations,
+    loading,
+    error,
+    fetchConversations,
+  } = useConversations();
   const { user } = useUser();
   const navigate = useNavigate();
 
   useEffect(() => {
-
-    socket.on("newConversation", refetchConversations);
-    socket.on("newMessage", refetchConversations);
+    socket.on("newConversation", fetchConversations);
+    socket.on("newMessage", fetchConversations);
 
     return () => {
-      socket.off("newConversation", refetchConversations);
-      socket.off("newMessage", refetchConversations);
+      socket.off("newConversation", fetchConversations);
+      socket.off("newMessage", fetchConversations);
     };
-  }, [refetchConversations]);
+  }, [fetchConversations]);
 
   if (user === null) {
     navigate("/login");

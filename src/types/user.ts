@@ -1,7 +1,7 @@
 type User = {
   _id: string;
   username: string;
-  avatarUrl: string | null;
+  lastseen: Date;
 };
 
 type UserContextType = {

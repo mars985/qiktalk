@@ -25,7 +25,7 @@ export function useConversations() {
     fetchConversations();
   }, []);
 
-  return { conversations, loading, error, refetchConversations: fetchConversations };
+  return { conversations, loading, error, fetchConversations };
 }
 
 export default useConversations;
