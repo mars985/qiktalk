@@ -45,7 +45,6 @@ const LoginPage = () => {
         justifyContent: "center",
         alignItems: "center",
         height: "100vh",
-        backgroundColor: "beige",
       }}
     >
       <Card className="w-full max-w-sm">

@@ -1,5 +1,4 @@
-import { useState } from "react";
-
+import { useState, useEffect } from "react";
 import {
   ResizableHandle,
   ResizablePanel,
@@ -11,21 +10,45 @@ import SideBar from "@/components/SideBar";
 
 const HomePage = () => {
   const [conversationId, setConversationId] = useState<string | null>(null);
+  const [isMobile, setIsMobile] = useState(false);
 
-  return (
-    <>
-      <ResizablePanelGroup direction="horizontal" className="h-full">
-        <ResizablePanel minSize={20} maxSize={50} defaultSize={25}>
+  // Handle window resizing to detect mobile
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile(); // Initial check
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  // MOBILE VIEW
+  if (isMobile) {
+    return (
+      <div className="h-full w-full">
+        {!conversationId ? (
           <SideBar setConversationId={setConversationId} />
-        </ResizablePanel>
+        ) : (
+          <MessagePanel 
+            conversationId={conversationId} 
+            onBack={() => setConversationId(null)}
+          />
+        )}
+      </div>
+    );
+  }
 
-        <ResizableHandle className="bg-base-300"/>
+  // DESKTOP VIEW
+  return (
+    <ResizablePanelGroup direction="horizontal" className="h-full">
+      <ResizablePanel minSize={20} maxSize={50} defaultSize={25}>
+        <SideBar setConversationId={setConversationId} />
+      </ResizablePanel>
 
-        <ResizablePanel>
-            <MessagePanel conversationId={conversationId} />
-        </ResizablePanel>
-      </ResizablePanelGroup>
-    </>
+      <ResizableHandle className="bg-base-300" />
+
+      <ResizablePanel>
+        <MessagePanel conversationId={conversationId} />
+      </ResizablePanel>
+    </ResizablePanelGroup>
   );
 };
 

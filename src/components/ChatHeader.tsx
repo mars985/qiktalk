@@ -6,9 +6,12 @@ import api from "@/lib/axios";
 import useUser from "@/hooks/useUser";
 import type { Conversation } from "@/types/conversation";
 
-const ChatHeader: React.FC<{ conversationId: string | null }> = ({
-  conversationId,
-}) => {
+import { ChevronLeft } from "lucide-react";
+
+const ChatHeader: React.FC<{
+  conversationId: string | null;
+  onBack?: () => void;
+}> = ({ conversationId, onBack }) => {
   const { user } = useUser();
   const [conversation, setConversation] = useState<Conversation | null>(null);
   const [loading, setLoading] = useState(false);
@@ -116,6 +119,17 @@ const ChatHeader: React.FC<{ conversationId: string | null }> = ({
 
   return (
     <div className="flex flex-row items-center px-4 gap-3 h-16 w-full border-b border-base-300">
+      {/* 1. Add the Mobile Back Button */}
+      {onBack && (
+        <button 
+          onClick={onBack}
+          className="md:hidden p-2 -ml-2 hover:bg-base-300 rounded-full transition-colors"
+          aria-label="Back to conversations"
+        >
+          <ChevronLeft size={24} />
+        </button>
+      )}
+
       {loading ? (
         <span className="text-base-content/60">Loading...</span>
       ) : conversation ? (

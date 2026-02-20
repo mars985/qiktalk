@@ -9,24 +9,13 @@ import useUser from "@/hooks/useUser";
 import type { Message } from "@/types/message";
 import api from "@/lib/axios";
 import socket from "@/lib/socket";
-
-// --- helpers ---
-function getTimestampFromObjectId(objectId: string) {
-  return new Date(parseInt(objectId.substring(0, 8), 16) * 1000);
-}
-
-function formatDate(objectId: string) {
-  return getTimestampFromObjectId(objectId).toLocaleDateString([], {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-  });
-}
+import { formatDate } from "@/lib/utils";
 
 // --- component ---
-const MessagePanel: React.FC<{ conversationId: string | null }> = ({
-  conversationId,
-}) => {
+const MessagePanel: React.FC<{
+  conversationId: string | null;
+  onBack?: () => void;
+}> = ({ conversationId, onBack }) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const containerRef = useRef<HTMLDivElement>(null);
   const { user } = useUser();
@@ -34,7 +23,7 @@ const MessagePanel: React.FC<{ conversationId: string | null }> = ({
   // listen for new messages
   useEffect(() => {
     if (!conversationId) return;
-    
+
     const handleNewMessage = (msg: Message) => {
       setMessages((prev) => [...prev, msg]);
     };
@@ -82,7 +71,9 @@ const MessagePanel: React.FC<{ conversationId: string | null }> = ({
   const renderMessages = () => {
     if (!messages.length)
       return (
-        <div className="text-center text-base-content/60 py-6">No messages found.</div>
+        <div className="text-center text-base-content/60 py-6">
+          No messages found.
+        </div>
       );
 
     // newest -> oldest (so first DOM child is the newest)
@@ -117,11 +108,12 @@ const MessagePanel: React.FC<{ conversationId: string | null }> = ({
   };
 
   return (
-    <div className="flex flex-col relative">
-      <ChatHeader conversationId={conversationId} />
+    <div className="flex flex-col relative h-full">
+      {/* Pass onBack to the header */}
+      <ChatHeader conversationId={conversationId} onBack={onBack} />
       <div
         ref={containerRef}
-        className="h-[80vh] overflow-y-auto px-4 flex flex-col-reverse gap-2"
+        className="flex-1 overflow-y-auto px-4 flex flex-col-reverse gap-2"
       >
         {renderMessages()}
       </div>
