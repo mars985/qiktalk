@@ -1,6 +1,7 @@
 import { Route, Routes } from "react-router-dom";
 
 import { UserProvider } from "@/contexts/UserContext";
+import { PresenceProvider } from "@/contexts/PresenceContext";
 
 import SignupPage from "./pages/SignupPage";
 import LoginPage from "./pages/LoginPage";
@@ -17,7 +18,9 @@ export default function App() {
           element={
             <UserProvider>
               <ProtectedRoute>
-                <HomePage />
+                <PresenceProvider>
+                  <HomePage />
+                </PresenceProvider>
               </ProtectedRoute>
             </UserProvider>
           }

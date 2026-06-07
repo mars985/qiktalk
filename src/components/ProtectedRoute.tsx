@@ -13,18 +13,16 @@ const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({
   const { user, setUser } = useUser();
 
   useEffect(() => {
-    if (user) {
-      socket.connect();
+    if (!user) return;
 
-      socket.on("connect", () => {
-        socket.emit("userlogin", user._id.toString());
-      });
+    // Open the authenticated socket. The server reads the user's identity from
+    // the auth handshake and handles room-join + presence automatically, so
+    // there's nothing more for the client to announce here.
+    socket.connect();
 
-      return () => {
-        socket.off("connect");
-        socket.disconnect();
-      };
-    }
+    return () => {
+      socket.disconnect();
+    };
   }, [user]);
 
   useEffect(() => {

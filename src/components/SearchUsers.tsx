@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { Search } from "lucide-react";
 import api from "@/lib/axios";
 import type { User } from "@/types/user";
 
@@ -26,7 +27,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSelectUser, placeholder }) => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // Debounce search
+  // Debounced search
   useEffect(() => {
     if (skipSearch) {
       setSkipSearch(false);
@@ -39,10 +40,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSelectUser, placeholder }) => {
       return;
     }
 
-    const delayDebounce = setTimeout(() => {
-      searchUsernames(query);
-    }, 400);
-
+    const delayDebounce = setTimeout(() => searchUsernames(query), 350);
     return () => clearTimeout(delayDebounce);
   }, [query, skipSearch]);
 
@@ -51,11 +49,11 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSelectUser, placeholder }) => {
       setLoading(true);
       const res = await api.get("/searchUsernames", { params: { searchString } });
       setResults(res.data.data);
-      setOpen(res.data.data.length > 0);
+      setOpen(true);
     } catch (error) {
       console.error("Error searching usernames:", error);
       setResults([]);
-      setOpen(false);
+      setOpen(true);
     } finally {
       setLoading(false);
     }
@@ -64,58 +62,51 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSelectUser, placeholder }) => {
   const handleSelect = (user: User) => {
     setSkipSearch(true);
     setQuery("");
+    setResults([]);
     setOpen(false);
     onSelectUser(user);
   };
 
   return (
-    <div ref={wrapperRef} className="relative w-72">
-      {/* Input wrapper */}
-      <div
-        className="
-          flex items-center px-3 py-2 rounded-md shadow
-          bg-base-200 hover:bg-base-300 transition-all
-          focus-within:ring-2 focus-within:ring-secondary
-        "
-      >
+    <div ref={wrapperRef} className="relative w-full">
+      {/* Input */}
+      <div className="flex items-center gap-2 rounded-lg bg-base-200 px-3 py-2 transition-all focus-within:ring-2 focus-within:ring-primary">
+        <Search size={16} className="shrink-0 text-base-content/50" />
         <input
           type="text"
           placeholder={placeholder || "Search..."}
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          className="
-            flex-1 bg-transparent outline-none text-sm
-            placeholder:text-base-content/50
-            text-base-content
-          "
+          className="flex-1 bg-transparent text-sm text-base-content outline-none placeholder:text-base-content/50"
         />
         {loading && (
-          <div className="w-4 h-4 border-2 border-base-300 border-t-base-content rounded-full animate-spin ml-2" />
+          <div className="h-4 w-4 shrink-0 animate-spin rounded-full border-2 border-base-300 border-t-base-content" />
         )}
       </div>
 
-      {/* Dropdown */}
+      {/* Results */}
       {open && (
-        <ul
-          className="
-            absolute left-0 right-0 mt-1 rounded-md shadow-md z-10
-            max-h-52 overflow-y-auto border border-base-300
-            bg-base-100
-          "
-        >
-          {results.map((user) => (
-            <li
-              key={user._id}
-              onClick={() => handleSelect(user)}
-              className="
-                px-3 py-2 text-sm cursor-pointer transition-colors
-                hover:bg-base-200
-                text-base-content
-              "
-            >
-              {user.username}
-            </li>
-          ))}
+        <ul className="absolute left-0 right-0 z-10 mt-1 max-h-56 overflow-y-auto rounded-lg border border-base-300 bg-base-100 p-1 shadow-lg">
+          {results.length > 0 ? (
+            results.map((user) => (
+              <li
+                key={user._id}
+                onClick={() => handleSelect(user)}
+                className="flex cursor-pointer items-center gap-2.5 rounded-md px-2 py-2 text-sm text-base-content transition-colors hover:bg-base-200"
+              >
+                <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-neutral text-xs font-semibold text-neutral-content">
+                  {user.username.charAt(0).toUpperCase()}
+                </span>
+                <span className="truncate">{user.username}</span>
+              </li>
+            ))
+          ) : (
+            !loading && (
+              <li className="px-3 py-3 text-center text-sm text-base-content/50">
+                No users found
+              </li>
+            )
+          )}
         </ul>
       )}
     </div>

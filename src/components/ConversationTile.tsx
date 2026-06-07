@@ -1,6 +1,7 @@
 import React from "react";
 import { Users } from "lucide-react"; // group icon
 import ConversationAvatar from "./ConversationAvatar";
+import usePresence from "@/hooks/usePresence";
 
 import type { Conversation } from "@/types/conversation";
 import type { User } from "@/types/user";
@@ -16,8 +17,11 @@ const ConversationTile: React.FC<ConversationTileProps> = ({
   user,
   onSelect,
 }) => {
+  const { getStatus } = usePresence();
   const lastMessage = conv.messages.at(-1);
   const otherUsers = conv.participants.filter((p) => p._id !== user._id);
+  const dmPartnerOnline =
+    conv.type === "dm" ? getStatus(otherUsers[0]?._id)?.online ?? false : undefined;
 
   return (
     <li
@@ -30,7 +34,11 @@ const ConversationTile: React.FC<ConversationTileProps> = ({
       onClick={() => onSelect(conv._id)}
     >
       {conv.type === "dm" ? (
-        <ConversationAvatar type="dm" otherUsers={otherUsers} />
+        <ConversationAvatar
+          type="dm"
+          otherUsers={otherUsers}
+          online={dmPartnerOnline}
+        />
       ) : (
         <div className="bg-neutral text-neutral-content w-12 h-12 rounded-full flex items-center justify-center">
           <Users size={24} />

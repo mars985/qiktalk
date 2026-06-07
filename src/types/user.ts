@@ -1,7 +1,8 @@
 type User = {
   _id: string;
   username: string;
-  lastseen: Date;
+  email?: string;
+  lastseen?: string | null;
 };
 
 type UserContextType = {
