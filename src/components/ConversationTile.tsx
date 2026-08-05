@@ -50,8 +50,8 @@ const ConversationTile: React.FC<ConversationTileProps> = ({
           {conv.type === "group"
             ? conv.groupName || "Unnamed Group"
             : otherUsers.length > 0
-            ? otherUsers.map((p) => p.username).join(", ")
-            : "No participants"}
+              ? otherUsers.map((p) => p.username).join(", ")
+              : "No participants"}
         </div>
         <div className="text-sm text-base-content/70 truncate">
           {lastMessage?.body || "No messages yet"}

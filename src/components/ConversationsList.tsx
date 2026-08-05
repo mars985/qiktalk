@@ -38,15 +38,12 @@ const ConversationsList: React.FC<{
   if (error) return <div>Error: {error}</div>;
 
   const filteredConversations = conversations.filter((conv) => {
-    // Exclude DMs with no messages
     if (conv.type === "dm" && (!conv.messages || conv.messages.length === 0)) {
       return false;
     }
-
-    // Keep all groups and all DMs that have messages
     return true;
   });
-
+  
   if (filteredConversations.length === 0) {
     return <div>No conversations found.</div>;
   }

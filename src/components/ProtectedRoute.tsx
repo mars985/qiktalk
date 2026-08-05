@@ -29,8 +29,8 @@ const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({
     api
       .get("/verify")
       .then((res) => {
-        if (res.data.verified) {
-          setUser(res.data.user);
+        if (res.data.success) {
+          setUser(res.data.data);
           setLoading(false);
         } else {
           navigate("/login");
