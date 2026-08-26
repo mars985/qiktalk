@@ -27,14 +27,14 @@ const NewChatPanel: React.FC<NewChatPanelProps> = ({
       { conversationType: "dm", targetUserId: targetUser._id },
       (response: {
         success: boolean;
-        conversation?: Conversation;
-        error?: string;
+        data?: Conversation;
+        message?: string;
       }) => {
-        if (response.success && response.conversation) {
-          onNewChat(response.conversation._id);
+        if (response.success && response.data) {
+          onNewChat(response.data._id);
           onClose();
         } else {
-          setError(response.error || "Couldn't start chat. Try again.");
+          setError(response.message || "Couldn't start chat. Try again.");
         }
       }
     );

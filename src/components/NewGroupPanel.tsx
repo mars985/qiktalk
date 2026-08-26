@@ -47,15 +47,15 @@ const NewGroupPanel: React.FC<NewGroupPanelProps> = ({
       },
       (response: {
         success: boolean;
-        conversation?: Conversation;
-        error?: string;
+        data?: Conversation;
+        message?: string;
       }) => {
         setCreating(false);
-        if (response.success && response.conversation) {
-          onNewGroup(response.conversation._id);
+        if (response.success && response.data) {
+          onNewGroup(response.data._id);
           onClose();
         } else {
-          setError(response.error || "Couldn't create group. Try again.");
+          setError(response.message || "Couldn't create group. Try again.");
         }
       }
     );

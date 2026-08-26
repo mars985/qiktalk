@@ -34,7 +34,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSelectUser, placeholder }) => {
       return;
     }
 
-    if (!query.trim()) {
+    if (!query.trim() || query.length < 3) {
       setResults([]);
       setOpen(false);
       return;
