@@ -7,9 +7,12 @@ const LogoutButton: React.FC = () => {
   return (
     <button
       className="btn btn-xs sm:btn-sm md:btn-md"
-      onClick={() => {
-        api.get("/logout");
-        navigate("/login");
+      onClick={async () => {
+        try {
+          await api.get("/logout");
+        } finally {
+          navigate("/login");
+        }
       }}
     >
       Logout
