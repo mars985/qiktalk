@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -10,8 +9,11 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import api from "@/lib/axios";
+
+import { UserRequest } from "@/api/user.api";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -22,13 +24,8 @@ const LoginPage = () => {
     e.preventDefault(); // prevent page reload
 
     try {
-      const response = await api.post(
-        "/login",
-        {
-          email,
-          password,
-        },
-        { withCredentials: true }
+      const response = await UserRequest.login(
+        { email, password }
       );
 
       if (response.data.success === true) navigate("/");

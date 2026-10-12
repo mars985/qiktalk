@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -9,8 +8,11 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import api from "@/lib/axios";
+
+import { UserRequest } from "@/api/user.api";
 
 const SignupPage = () => {
   const [username, setUsername] = useState("");
@@ -23,10 +25,8 @@ const SignupPage = () => {
     e.preventDefault();
 
     try {
-      const response = await api.post(
-        "/createUser",
+      const response = await UserRequest.register(
         { email, password, username },
-        { withCredentials: true }
       );
       if (response.data.success === true) navigate("/");
       else throw "Server failure";

@@ -9,6 +9,7 @@ import type { Conversation } from "@/types/conversation";
 import type { PresenceInfo } from "@/contexts/PresenceContext";
 
 import { ChevronLeft } from "lucide-react";
+import { UserRequest } from "@/api/user.api";
 
 // Human-friendly "last seen" string for an offline user.
 function formatLastSeen(value: string | null): string {
@@ -79,8 +80,7 @@ const ChatHeader: React.FC<{
     }
 
     let cancelled = false;
-    api
-      .get(`/getOnlineStatus/${partner._id}`)
+    UserRequest.getOnlineStatus(partner._id)
       .then((res) => {
         if (!cancelled && res.data.success) setSeedStatus(res.data.data);
       })
@@ -116,14 +116,12 @@ const ChatHeader: React.FC<{
         {partner?.username || "Unknown User"}
       </span>
       <span
-        className={`flex items-center gap-1.5 text-xs ${
-          isOnline ? "text-success" : "text-base-content/60"
-        }`}
+        className={`flex items-center gap-1.5 text-xs ${isOnline ? "text-success" : "text-base-content/60"
+          }`}
       >
         <span
-          className={`inline-block h-2 w-2 rounded-full ${
-            isOnline ? "bg-success" : "bg-base-content/30"
-          }`}
+          className={`inline-block h-2 w-2 rounded-full ${isOnline ? "bg-success" : "bg-base-content/30"
+            }`}
         />
         {statusText}
       </span>
