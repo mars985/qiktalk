@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import api from "@/lib/axios";
 import type { Conversation } from "@/types/conversation";
+import { ConversationRequest } from "@/api/conversation.api";
 
 export function useConversations() {
   const [conversations, setConversations] = useState<Conversation[]>([]);
@@ -8,8 +9,7 @@ export function useConversations() {
   const [error, setError] = useState<string | null>(null);
 
   const fetchConversations = async () => {
-    api
-      .get("/getConversations")
+    ConversationRequest.getConversations()
       .then((res) => {
         if (res.data.success) {
           setConversations(res.data.data);

@@ -7,9 +7,9 @@ import ChatHeader from "./ChatHeader";
 
 import useUser from "@/hooks/useUser";
 import type { Message } from "@/types/message";
-import api from "@/lib/axios";
 import socket from "@/lib/socket";
 import { formatDate } from "@/lib/utils";
+import { ConversationRequest } from "@/api/conversation.api";
 
 // --- component ---
 const MessagePanel: React.FC<{
@@ -41,7 +41,7 @@ const MessagePanel: React.FC<{
 
     const fetchMessages = async () => {
       try {
-        const res = await api.get(`/messages/${conversationId}`);
+        const res = await ConversationRequest.getConversationMessages(conversationId);
         setMessages(res.data.data);
 
         requestAnimationFrame(() => {

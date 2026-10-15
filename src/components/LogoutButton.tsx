@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 
-import api from "@/lib/axios";
+import { UserRequest } from "@/api/user.api";
 
 const LogoutButton: React.FC = () => {
   const navigate = useNavigate();
@@ -9,7 +9,7 @@ const LogoutButton: React.FC = () => {
       className="btn btn-xs sm:btn-sm md:btn-md"
       onClick={async () => {
         try {
-          await api.get("/logout");
+          await UserRequest.logout();
         } finally {
           navigate("/login");
         }

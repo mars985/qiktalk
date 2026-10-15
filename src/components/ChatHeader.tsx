@@ -1,15 +1,15 @@
 import { useEffect, useMemo, useState } from "react";
+import { ChevronLeft } from "lucide-react";
 
 import ConversationAvatar from "./ConversationAvatar";
 
-import api from "@/lib/axios";
 import useUser from "@/hooks/useUser";
 import usePresence from "@/hooks/usePresence";
 import type { Conversation } from "@/types/conversation";
 import type { PresenceInfo } from "@/contexts/PresenceContext";
 
-import { ChevronLeft } from "lucide-react";
 import { UserRequest } from "@/api/user.api";
+import { ConversationRequest } from "@/api/conversation.api";
 
 // Human-friendly "last seen" string for an offline user.
 function formatLastSeen(value: string | null): string {
@@ -42,18 +42,15 @@ const ChatHeader: React.FC<{
   const { getStatus } = usePresence();
   const [conversation, setConversation] = useState<Conversation | null>(null);
   const [loading, setLoading] = useState(false);
-  // Authoritative status fetched once when the conversation opens; live socket
-  // updates from the presence context take precedence over it.
   const [seedStatus, setSeedStatus] = useState<PresenceInfo | null>(null);
 
-  // Fetch conversation details
   useEffect(() => {
     if (!conversationId) return;
 
     const fetchConversation = async () => {
       try {
         setLoading(true);
-        const res = await api.get(`/${conversationId}`);
+        const res = await ConversationRequest.getConversationById(conversationId);
         setConversation(res.data.data);
       } catch (err) {
         console.error("Failed to fetch conversation:", err);

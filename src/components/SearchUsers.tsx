@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { Search } from "lucide-react";
 import api from "@/lib/axios";
 import type { User } from "@/types/user";
+import { UserRequest } from "@/api/user.api";
 
 interface SearchBarProps {
   onSelectUser: (user: User) => void;
@@ -47,7 +48,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSelectUser, placeholder }) => {
   const searchUsernames = async (searchString: string) => {
     try {
       setLoading(true);
-      const res = await api.get("/searchUsernames", { params: { searchString } });
+      const res = await UserRequest.searchUsernames(searchString);
       setResults(res.data.data);
       setOpen(true);
     } catch (error) {
