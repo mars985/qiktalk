@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import api from "@/lib/axios";
 import useUser from "@/hooks/useUser";
+import { UserRequest } from "@/api/user.api";
 
 const PublicRoute: React.FC<{ children: React.ReactNode }> = ({
   children,
@@ -12,8 +12,7 @@ const PublicRoute: React.FC<{ children: React.ReactNode }> = ({
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    api
-      .get("/verify")
+    UserRequest.verify()
       .then((res) => {
         if (res.data.success) {
           setUser(res.data.data);

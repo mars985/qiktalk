@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import useUser from "@/hooks/useUser";
-import api from "@/lib/axios";
 import socket from "@/lib/socket";
+import { UserRequest } from "@/api/user.api";
 
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({
   children,
@@ -26,8 +26,7 @@ const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({
   }, [user]);
 
   useEffect(() => {
-    api
-      .get("/verify")
+    UserRequest.verify()
       .then((res) => {
         if (res.data.success) {
           setUser(res.data.data);

@@ -12,14 +12,14 @@ interface RegisterData extends LoginData {
 };
 
 const register = async function ({ email, password, username }: RegisterData) {
-    return api.put(
+    return api.post(
         userRoute("/register"),
         { email, password, username },
     );
 };
 
 const login = async function ({ email, password }: LoginData) {
-    return api.put(
+    return api.post(
         userRoute("/login"),
         { email, password },
     );
