@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
 
 import useUser from "@/hooks/useUser";
-import socket from "@/lib/socket";
+import { conversationEmitters } from "@/socket/conversation.socket";
 
 const MessageBox: React.FC<{ conversationId: string | null }> = ({
   conversationId,
@@ -20,18 +20,18 @@ const MessageBox: React.FC<{ conversationId: string | null }> = ({
   const sendMessage = async () => {
     if (!text.trim() || !conversationId || !user) return;
 
-    try {
-      if (!text.replace(/\s/g, "").length) return;
-      socket.emit("sendMessage", {
-        message: text,
-        conversationId,
-        senderId: user._id,
-      });
+    conversationEmitters.sendMessage({
+      message: text,
+      conversationId,
+    }, (response) => {
+      if (!response.success) {
+        console.error(response.message, response.errors);
+      } else {
+        // TODO: push new message to existing cached conversation instead of refetching all conversations
+      }
+    });
 
-      setText("");
-    } catch (err) {
-      console.error("Error sending message:", err);
-    }
+    setText("");
   };
 
   return (

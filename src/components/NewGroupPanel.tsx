@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { ArrowLeft, X, Users } from "lucide-react";
+
 import SearchBar from "./SearchUsers";
-import socket from "@/lib/socket";
 import type { User } from "@/types/user";
-import type { Conversation } from "@/types/conversation";
+import { conversationEmitters } from "@/socket/conversation.socket";
 
 interface NewGroupPanelProps {
   onNewGroup: (conversationId: string) => void;
@@ -38,20 +38,14 @@ const NewGroupPanel: React.FC<NewGroupPanelProps> = ({
     setCreating(true);
     setError(null);
 
-    socket.emit(
-      "createConversation",
+    conversationEmitters.createGroup(
       {
-        conversationType: "group",
         participantIds: selectedUsers.map((u) => u._id),
         groupName: groupName.trim(),
       },
-      (response: {
-        success: boolean;
-        data?: Conversation;
-        message?: string;
-      }) => {
+      (response) => {
         setCreating(false);
-        if (response.success && response.data) {
+        if (response.success) {
           onNewGroup(response.data._id);
           onClose();
         } else {

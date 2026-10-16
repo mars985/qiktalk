@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Search } from "lucide-react";
-import api from "@/lib/axios";
 import type { User } from "@/types/user";
 import { UserRequest } from "@/api/user.api";
 

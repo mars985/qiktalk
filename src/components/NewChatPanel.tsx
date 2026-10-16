@@ -1,9 +1,10 @@
 import React, { useState } from "react";
+import axios from "axios";
 import { ArrowLeft, X } from "lucide-react";
+
 import SearchBar from "./SearchUsers";
-import socket from "@/lib/socket";
 import type { User } from "@/types/user";
-import type { Conversation } from "@/types/conversation";
+import { ConversationRequest } from "@/api/conversation.api";
 
 interface NewChatPanelProps {
   onNewChat: (conversationId: string) => void;
@@ -18,26 +19,20 @@ const NewChatPanel: React.FC<NewChatPanelProps> = ({
 }) => {
   const [error, setError] = useState<string | null>(null);
 
-  // Create (or reuse) a DM over the socket so both participants are notified in
-  // real time — same path the group flow uses.
-  const handleSelectUser = (targetUser: User) => {
+  const handleSelectUser = async (targetUser: User) => {
     setError(null);
-    socket.emit(
-      "createConversation",
-      { conversationType: "dm", targetUserId: targetUser._id },
-      (response: {
-        success: boolean;
-        data?: Conversation;
-        message?: string;
-      }) => {
-        if (response.success && response.data) {
-          onNewChat(response.data._id);
-          onClose();
-        } else {
-          setError(response.message || "Couldn't start chat. Try again.");
-        }
-      }
-    );
+
+    try {
+      const response = await ConversationRequest.createDM(targetUser._id);
+
+      onNewChat(response.data.data._id);
+      onClose();
+    } catch (error) {
+      setError(
+        (axios.isAxiosError(error) && error.response?.data?.message) ||
+        "Couldn't start chat. Try again."
+      );
+    }
   };
 
   return (

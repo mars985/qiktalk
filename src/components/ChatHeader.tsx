@@ -10,29 +10,7 @@ import type { PresenceInfo } from "@/contexts/PresenceContext";
 
 import { UserRequest } from "@/api/user.api";
 import { ConversationRequest } from "@/api/conversation.api";
-
-// Human-friendly "last seen" string for an offline user.
-function formatLastSeen(value: string | null): string {
-  if (!value) return "Offline";
-
-  const date = new Date(value);
-  if (isNaN(date.getTime())) return "Offline";
-
-  const diffMins = Math.floor((Date.now() - date.getTime()) / 60000);
-  if (diffMins < 1) return "last seen just now";
-  if (diffMins < 60) return `last seen ${diffMins} min${diffMins > 1 ? "s" : ""} ago`;
-
-  const diffHours = Math.floor(diffMins / 60);
-  if (diffHours < 24)
-    return `last seen ${diffHours} hour${diffHours > 1 ? "s" : ""} ago`;
-
-  return `last seen ${date.toLocaleString([], {
-    month: "short",
-    day: "numeric",
-    hour: "numeric",
-    minute: "2-digit",
-  })}`;
-}
+import { formatLastSeen } from "@/lib/utils";
 
 const ChatHeader: React.FC<{
   conversationId: string | null;
