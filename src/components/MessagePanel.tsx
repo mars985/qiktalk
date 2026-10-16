@@ -7,9 +7,9 @@ import ChatHeader from "./ChatHeader";
 
 import useUser from "@/hooks/useUser";
 import type { Message } from "@/types/message";
-import socket from "@/lib/socket";
 import { formatDate } from "@/lib/utils";
 import { ConversationRequest } from "@/api/conversation.api";
+import { useConversationSockets } from "@/socket/useConversationSocket";
 
 // --- component ---
 const MessagePanel: React.FC<{
@@ -21,19 +21,14 @@ const MessagePanel: React.FC<{
   const { user } = useUser();
 
   // listen for new messages
-  useEffect(() => {
-    if (!conversationId) return;
-
-    const handleNewMessage = (msg: Message) => {
-      setMessages((prev) => [...prev, msg]);
-    };
-
-    socket.on("newMessage", handleNewMessage);
-
-    return () => {
-      socket.off("newMessage", handleNewMessage);
-    };
-  }, [conversationId]);
+  useConversationSockets({
+    onNewMessage: conversationId
+      ? ({ message, conversationId: messageConversationId }) => {
+          if (messageConversationId !== conversationId) return;
+          setMessages((prev) => [...prev, message]);
+        }
+      : undefined,
+  });
 
   // initial fetch
   useEffect(() => {
@@ -95,9 +90,8 @@ const MessagePanel: React.FC<{
         <React.Fragment key={message._id}>
           <div
             data-date={messageDate}
-            className={`message-wrapper flex ${
-              isOwn ? "justify-end" : "justify-start"
-            } ${idx === 0 ? "pb-6" : ""}`} // bottom padding for the very bottom-most (newest) item
+            className={`message-wrapper flex ${isOwn ? "justify-end" : "justify-start"
+              } ${idx === 0 ? "pb-6" : ""}`} // bottom padding for the very bottom-most (newest) item
           >
             <MessageTile message={message} isOwn={isOwn} />
           </div>

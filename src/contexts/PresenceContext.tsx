@@ -1,5 +1,6 @@
 import React, { createContext, useEffect, useState } from "react";
 import socket from "@/lib/socket";
+import { usePresenceSockets } from "@/socket/usePresenceSocket";
 
 export type PresenceInfo = {
   online: boolean;
@@ -29,8 +30,8 @@ export const PresenceProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const [statuses, setStatuses] = useState<PresenceMap>({});
 
-  useEffect(() => {
-    const handleSnapshot = (userIds: string[]) => {
+  usePresenceSockets({
+    onSnapshot: (userIds) => {
       setStatuses((prev) => {
         const next = { ...prev };
         for (const id of userIds) {
@@ -38,13 +39,8 @@ export const PresenceProvider: React.FC<{ children: React.ReactNode }> = ({
         }
         return next;
       });
-    };
-
-    const handleUpdate = (update: {
-      userId: string;
-      online: boolean;
-      lastSeen?: string | null;
-    }) => {
+    },
+    onUpdate: (update) => {
       setStatuses((prev) => ({
         ...prev,
         [update.userId]: {
@@ -52,19 +48,11 @@ export const PresenceProvider: React.FC<{ children: React.ReactNode }> = ({
           lastSeen: update.lastSeen ?? prev[update.userId]?.lastSeen ?? null,
         },
       }));
-    };
+    },
+  });
 
-    socket.on("presence:snapshot", handleSnapshot);
-    socket.on("presence:update", handleUpdate);
-
-    // Request the current roster. socket.io buffers this emit until the
-    // connection (opened in ProtectedRoute) is established.
+  useEffect(() => {
     socket.emit("presence:request");
-
-    return () => {
-      socket.off("presence:snapshot", handleSnapshot);
-      socket.off("presence:update", handleUpdate);
-    };
   }, []);
 
   const getStatus = (userId?: string | null) =>

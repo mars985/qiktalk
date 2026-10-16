@@ -1,13 +1,9 @@
 import socket from "@/lib/socket";
+import type { Conversation } from "@/types/conversation";
+import type { Message } from "@/types/message";
+import type { SocketCallback } from "./emit.events";
 
-export interface ServerResponse {
-  success: boolean;
-  data?: any;
-  message?: string;
-  errors?: any;
-}
-
-export type SocketCallback = (response: ServerResponse) => void;
+export type { ServerResponse, SocketCallback } from "./emit.events";
 
 export const conversationEmitters = {
   createGroup: (
@@ -15,12 +11,12 @@ export const conversationEmitters = {
       participantIds: string[];
       groupName: string;
     },
-    callback?: SocketCallback,
+    callback?: SocketCallback<Conversation>,
   ) => {
     socket.emit("createGroup", data, callback);
   },
 
-  createDM: (targetUserId: string, callback?: SocketCallback) => {
+  createDM: (targetUserId: string, callback?: SocketCallback<Conversation>) => {
     socket.emit("createDM", { targetUserId }, callback);
   },
 
@@ -33,7 +29,7 @@ export const conversationEmitters = {
       conversationId: string;
       message: string;
     },
-    callback?: SocketCallback,
+    callback?: SocketCallback<Message>,
   ) => {
     socket.emit("sendMessage", data, callback);
   },
