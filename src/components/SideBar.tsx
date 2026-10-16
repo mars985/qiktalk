@@ -48,11 +48,11 @@ const SideBar: React.FC<{
           <LogoutButton />
 
           <div className="w-2" />
-          
+
           <ToggleTheme />
-          
+
           <div className="w-2" />
-          
+
           <NewChatDropdown
             onNewChat={(conversationId) => setConversationId(conversationId)}
             onNewGroup={(conversationId) => setConversationId(conversationId)}

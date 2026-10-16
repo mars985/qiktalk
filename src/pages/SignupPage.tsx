@@ -25,9 +25,11 @@ const SignupPage = () => {
     e.preventDefault();
 
     try {
-      const response = await UserRequest.register(
-        { email, password, username },
-      );
+      const response = await UserRequest.register({
+        email,
+        password,
+        username,
+      });
       if (response.data.success === true) navigate("/");
       else throw "Server failure";
     } catch (err) {
@@ -100,7 +102,10 @@ const SignupPage = () => {
               />
             </div>
 
-            <Button type="submit" className="w-full bg-primary text-primary-content">
+            <Button
+              type="submit"
+              className="w-full bg-primary text-primary-content"
+            >
               Sign up
             </Button>
           </form>

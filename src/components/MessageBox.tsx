@@ -20,16 +20,19 @@ const MessageBox: React.FC<{ conversationId: string | null }> = ({
   const sendMessage = async () => {
     if (!text.trim() || !conversationId || !user) return;
 
-    conversationEmitters.sendMessage({
-      message: text,
-      conversationId,
-    }, (response) => {
-      if (!response.success) {
-        console.error(response.message, response.errors);
-      } else {
-        // TODO: push new message to existing cached conversation instead of refetching all conversations
-      }
-    });
+    conversationEmitters.sendMessage(
+      {
+        message: text,
+        conversationId,
+      },
+      (response) => {
+        if (!response.success) {
+          console.error(response.message, response.errors);
+        } else {
+          // TODO: push new message to existing cached conversation instead of refetching all conversations
+        }
+      },
+    );
 
     setText("");
   };

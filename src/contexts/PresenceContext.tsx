@@ -14,7 +14,9 @@ export type PresenceContextType = {
   getStatus: (userId?: string | null) => PresenceInfo | undefined;
 };
 
-const PresenceContext = createContext<PresenceContextType | undefined>(undefined);
+const PresenceContext = createContext<PresenceContextType | undefined>(
+  undefined,
+);
 
 /**
  * Keeps a live map of who is online by listening to the server's presence

@@ -21,7 +21,9 @@ const ConversationTile: React.FC<ConversationTileProps> = ({
   const lastMessage = conv.messages.at(-1);
   const otherUsers = conv.participants.filter((p) => p._id !== user._id);
   const dmPartnerOnline =
-    conv.type === "dm" ? getStatus(otherUsers[0]?._id)?.online ?? false : undefined;
+    conv.type === "dm"
+      ? (getStatus(otherUsers[0]?._id)?.online ?? false)
+      : undefined;
 
   return (
     <li

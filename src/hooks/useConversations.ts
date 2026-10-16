@@ -19,12 +19,18 @@ export function useConversations() {
         setError(err.message || "Failed to load conversations");
         setLoading(false);
       });
-  }
+  };
   useEffect(() => {
     fetchConversations();
   }, []);
 
-  return { conversations, setConversations, loading, error, fetchConversations };
+  return {
+    conversations,
+    setConversations,
+    loading,
+    error,
+    fetchConversations,
+  };
 }
 
 export default useConversations;

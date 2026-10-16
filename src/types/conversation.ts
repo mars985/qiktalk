@@ -8,8 +8,8 @@ type Conversation = {
   messages: Message[];
   groupName: string | null;
   updatedAt: string | null;
-}
+};
 
 type ConversationType = "dm" | "group";
 
-export type { Conversation, ConversationType }
+export type { Conversation, ConversationType };

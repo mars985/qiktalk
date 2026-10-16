@@ -41,7 +41,8 @@ const MessagePanel: React.FC<{
 
     const fetchMessages = async () => {
       try {
-        const res = await ConversationRequest.getConversationMessages(conversationId);
+        const res =
+          await ConversationRequest.getConversationMessages(conversationId);
         setMessages(res.data.data);
 
         requestAnimationFrame(() => {

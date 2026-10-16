@@ -19,7 +19,10 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSelectUser, placeholder }) => {
   // Close dropdown on outside click
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (wrapperRef.current && !wrapperRef.current.contains(event.target as Node)) {
+      if (
+        wrapperRef.current &&
+        !wrapperRef.current.contains(event.target as Node)
+      ) {
         setOpen(false);
       }
     };
@@ -87,26 +90,24 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSelectUser, placeholder }) => {
       {/* Results */}
       {open && (
         <ul className="absolute left-0 right-0 z-10 mt-1 max-h-56 overflow-y-auto rounded-lg border border-base-300 bg-base-100 p-1 shadow-lg">
-          {results.length > 0 ? (
-            results.map((user) => (
-              <li
-                key={user._id}
-                onClick={() => handleSelect(user)}
-                className="flex cursor-pointer items-center gap-2.5 rounded-md px-2 py-2 text-sm text-base-content transition-colors hover:bg-base-200"
-              >
-                <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-neutral text-xs font-semibold text-neutral-content">
-                  {user.username.charAt(0).toUpperCase()}
-                </span>
-                <span className="truncate">{user.username}</span>
-              </li>
-            ))
-          ) : (
-            !loading && (
-              <li className="px-3 py-3 text-center text-sm text-base-content/50">
-                No users found
-              </li>
-            )
-          )}
+          {results.length > 0
+            ? results.map((user) => (
+                <li
+                  key={user._id}
+                  onClick={() => handleSelect(user)}
+                  className="flex cursor-pointer items-center gap-2.5 rounded-md px-2 py-2 text-sm text-base-content transition-colors hover:bg-base-200"
+                >
+                  <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-neutral text-xs font-semibold text-neutral-content">
+                    {user.username.charAt(0).toUpperCase()}
+                  </span>
+                  <span className="truncate">{user.username}</span>
+                </li>
+              ))
+            : !loading && (
+                <li className="px-3 py-3 text-center text-sm text-base-content/50">
+                  No users found
+                </li>
+              )}
         </ul>
       )}
     </div>

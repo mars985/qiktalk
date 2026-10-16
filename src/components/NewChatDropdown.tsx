@@ -23,7 +23,10 @@ const NewChatDropdown: React.FC<Props> = ({ onNewChat, onNewGroup }) => {
     if (!open) return;
 
     const handleClickOutside = (e: MouseEvent) => {
-      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+      if (
+        containerRef.current &&
+        !containerRef.current.contains(e.target as Node)
+      ) {
         closeAll();
       }
     };

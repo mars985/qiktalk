@@ -4,9 +4,11 @@
 @custom-variant dark (&:is(.dark *));
 
 @plugin "daisyui" {
-    themes: all;
+  themes: all;
 }
 
-html, body, #root {
+html,
+body,
+#root {
   height: 100%;
 }

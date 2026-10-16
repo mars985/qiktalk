@@ -24,9 +24,7 @@ const LoginPage = () => {
     e.preventDefault(); // prevent page reload
 
     try {
-      const response = await UserRequest.login(
-        { email, password }
-      );
+      const response = await UserRequest.login({ email, password });
 
       if (response.data.success === true) navigate("/");
       else throw "Server failure";

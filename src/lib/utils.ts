@@ -1,8 +1,8 @@
-import { clsx, type ClassValue } from "clsx"
-import { twMerge } from "tailwind-merge"
+import { clsx, type ClassValue } from "clsx";
+import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs))
+  return twMerge(clsx(inputs));
 }
 
 export function getTimestampFromObjectId(objectId: string) {
@@ -25,7 +25,8 @@ export function formatLastSeen(value: string | null): string {
 
   const diffMins = Math.floor((Date.now() - date.getTime()) / 60000);
   if (diffMins < 1) return "last seen just now";
-  if (diffMins < 60) return `last seen ${diffMins} min${diffMins > 1 ? "s" : ""} ago`;
+  if (diffMins < 60)
+    return `last seen ${diffMins} min${diffMins > 1 ? "s" : ""} ago`;
 
   const diffHours = Math.floor(diffMins / 60);
   if (diffHours < 24)

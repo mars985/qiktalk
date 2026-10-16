@@ -30,7 +30,7 @@ const NewChatPanel: React.FC<NewChatPanelProps> = ({
     } catch (error) {
       setError(
         (axios.isAxiosError(error) && error.response?.data?.message) ||
-        "Couldn't start chat. Try again."
+          "Couldn't start chat. Try again.",
       );
     }
   };
@@ -55,7 +55,10 @@ const NewChatPanel: React.FC<NewChatPanelProps> = ({
         </button>
       </div>
 
-      <SearchBar placeholder="Search by username..." onSelectUser={handleSelectUser} />
+      <SearchBar
+        placeholder="Search by username..."
+        onSelectUser={handleSelectUser}
+      />
 
       {error && <p className="mt-2 text-xs text-error">{error}</p>}
     </div>

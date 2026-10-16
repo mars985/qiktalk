@@ -28,7 +28,8 @@ const ChatHeader: React.FC<{
     const fetchConversation = async () => {
       try {
         setLoading(true);
-        const res = await ConversationRequest.getConversationById(conversationId);
+        const res =
+          await ConversationRequest.getConversationById(conversationId);
         setConversation(res.data.data);
       } catch (err) {
         console.error("Failed to fetch conversation:", err);
@@ -91,12 +92,14 @@ const ChatHeader: React.FC<{
         {partner?.username || "Unknown User"}
       </span>
       <span
-        className={`flex items-center gap-1.5 text-xs ${isOnline ? "text-success" : "text-base-content/60"
-          }`}
+        className={`flex items-center gap-1.5 text-xs ${
+          isOnline ? "text-success" : "text-base-content/60"
+        }`}
       >
         <span
-          className={`inline-block h-2 w-2 rounded-full ${isOnline ? "bg-success" : "bg-base-content/30"
-            }`}
+          className={`inline-block h-2 w-2 rounded-full ${
+            isOnline ? "bg-success" : "bg-base-content/30"
+          }`}
         />
         {statusText}
       </span>

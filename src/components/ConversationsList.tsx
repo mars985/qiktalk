@@ -11,12 +11,8 @@ import ConversationTile from "./ConversationTile";
 const ConversationsList: React.FC<{
   setConversationId: React.Dispatch<React.SetStateAction<string | null>>;
 }> = ({ setConversationId }) => {
-  const {
-    conversations,
-    loading,
-    error,
-    fetchConversations,
-  } = useConversations();
+  const { conversations, loading, error, fetchConversations } =
+    useConversations();
   const { user } = useUser();
   const navigate = useNavigate();
 
@@ -43,7 +39,7 @@ const ConversationsList: React.FC<{
     }
     return true;
   });
-  
+
   if (filteredConversations.length === 0) {
     return <div>No conversations found.</div>;
   }

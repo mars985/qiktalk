@@ -27,8 +27,8 @@ const HomePage = () => {
         {!conversationId ? (
           <SideBar setConversationId={setConversationId} />
         ) : (
-          <MessagePanel 
-            conversationId={conversationId} 
+          <MessagePanel
+            conversationId={conversationId}
             onBack={() => setConversationId(null)}
           />
         )}

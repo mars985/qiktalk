@@ -51,7 +51,7 @@ const NewGroupPanel: React.FC<NewGroupPanelProps> = ({
         } else {
           setError(response.message || "Couldn't create group. Try again.");
         }
-      }
+      },
     );
   };
 
@@ -113,7 +113,10 @@ const NewGroupPanel: React.FC<NewGroupPanelProps> = ({
             disabled={selectedUsers.length < 2}
             onClick={() => setStep("name")}
           >
-            Next{selectedUsers.length > 0 ? ` · ${selectedUsers.length} selected` : ""}
+            Next
+            {selectedUsers.length > 0
+              ? ` · ${selectedUsers.length} selected`
+              : ""}
           </button>
           {selectedUsers.length < 2 && (
             <p className="mt-2 text-center text-xs text-base-content/50">

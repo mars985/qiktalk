@@ -3,53 +3,43 @@ import api from "@/lib/axios";
 const userRoute = (route: string = "") => `/users${route}`;
 
 interface LoginData {
-    email: string,
-    password: string
-};
+  email: string;
+  password: string;
+}
 
 interface RegisterData extends LoginData {
-    username: string
-};
+  username: string;
+}
 
 const register = async function ({ email, password, username }: RegisterData) {
-    return api.post(
-        userRoute("/register"),
-        { email, password, username },
-    );
+  return api.post(userRoute("/register"), { email, password, username });
 };
 
 const login = async function ({ email, password }: LoginData) {
-    return api.post(
-        userRoute("/login"),
-        { email, password },
-    );
+  return api.post(userRoute("/login"), { email, password });
 };
 
 const logout = async function () {
-    return api.post(
-        userRoute("/logout")
-    );
+  return api.post(userRoute("/logout"));
 };
 
 const verify = async function () {
-    return api.get(
-        userRoute("/verify")
-    );
+  return api.get(userRoute("/verify"));
 };
 
 const searchUsernames = async function (searchString: string) {
-    return api.get(
-        userRoute("/searchUsernames"),
-        { params: { searchString } }
-    );
+  return api.get(userRoute("/searchUsernames"), { params: { searchString } });
 };
 
 const getOnlineStatus = async function (userId: string) {
-    return api.get(
-        userRoute(`/getOnlineStatus/${userId}`)
-    );
+  return api.get(userRoute(`/getOnlineStatus/${userId}`));
 };
 
 export const UserRequest = {
-    register, login, logout, verify, searchUsernames, getOnlineStatus
+  register,
+  login,
+  logout,
+  verify,
+  searchUsernames,
+  getOnlineStatus,
 };

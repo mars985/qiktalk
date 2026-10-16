@@ -26,16 +26,16 @@ The web client for **QikTalk**, a real-time one-to-one and group chat app. Built
 
 ## Tech stack
 
-| Concern        | Choice                                            |
-| -------------- | ------------------------------------------------- |
-| Framework      | React 19                                          |
-| Build tool     | Vite 7                                            |
-| Language       | TypeScript (strict)                               |
-| Styling        | Tailwind CSS v4, DaisyUI 5, shadcn/ui (auth)      |
-| Icons          | lucide-react                                      |
-| Routing        | react-router-dom 7                                |
-| HTTP           | axios                                             |
-| Realtime       | socket.io-client                                  |
+| Concern    | Choice                                       |
+| ---------- | -------------------------------------------- |
+| Framework  | React 19                                     |
+| Build tool | Vite 7                                       |
+| Language   | TypeScript (strict)                          |
+| Styling    | Tailwind CSS v4, DaisyUI 5, shadcn/ui (auth) |
+| Icons      | lucide-react                                 |
+| Routing    | react-router-dom 7                           |
+| HTTP       | axios                                        |
+| Realtime   | socket.io-client                             |
 
 ---
 
@@ -91,9 +91,9 @@ npm install
 cp .env.example .env
 ```
 
-| Variable           | Description                                                       | Example                  |
-| ------------------ | ----------------------------------------------------------------- | ------------------------ |
-| `VITE_BACKEND_URL` | Base URL of the backend (REST + Socket.IO). Used by axios/socket. | `http://localhost:4501`  |
+| Variable           | Description                                                       | Example                 |
+| ------------------ | ----------------------------------------------------------------- | ----------------------- |
+| `VITE_BACKEND_URL` | Base URL of the backend (REST + Socket.IO). Used by axios/socket. | `http://localhost:4501` |
 
 ### 3. Run
 
