@@ -12,24 +12,57 @@ import { Label } from "@/components/ui/label";
 
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import type { z } from "zod";
 
 import { UserRequest } from "@/api/user.api";
+import {
+  loginSchema,
+  toFieldErrors,
+  type FieldErrors,
+} from "@/validators/user.validator";
+
+type LoginFields = z.infer<typeof loginSchema>;
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [fieldErrors, setFieldErrors] = useState<FieldErrors<LoginFields>>({});
+  const [error, setError] = useState<string | null>(null);
+  const [submitting, setSubmitting] = useState(false);
 
   const navigate = useNavigate();
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault(); // prevent page reload
+    setError(null);
 
+    const result = loginSchema.safeParse({ email, password });
+    if (!result.success) {
+      setFieldErrors(toFieldErrors(result.error.issues));
+      return;
+    }
+    setFieldErrors({});
+
+    setSubmitting(true);
     try {
-      const response = await UserRequest.login({ email, password });
+      const response = await UserRequest.login(result.data);
 
       if (response.data.success === true) navigate("/");
       else throw "Server failure";
     } catch (err) {
-      console.error("Login failed:", err);
+      const serverFieldErrors = axios.isAxiosError(err)
+        ? toFieldErrors<LoginFields>(err.response?.data?.errors ?? [])
+        : {};
+      setFieldErrors(serverFieldErrors);
+
+      if (Object.keys(serverFieldErrors).length === 0) {
+        setError(
+          (axios.isAxiosError(err) && err.response?.data?.message) ||
+            "Couldn't log in. Try again.",
+        );
+      }
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -53,7 +86,11 @@ const LoginPage = () => {
           </CardAction>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+          <form
+            onSubmit={handleSubmit}
+            noValidate
+            className="flex flex-col gap-6"
+          >
             <div className="grid gap-2">
               <Label htmlFor="email">Email</Label>
               <Input
@@ -63,7 +100,11 @@ const LoginPage = () => {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                aria-invalid={!!fieldErrors.email}
               />
+              {fieldErrors.email && (
+                <p className="text-xs text-error">{fieldErrors.email}</p>
+              )}
             </div>
             <div className="grid gap-2">
               <div className="flex items-center">
@@ -81,10 +122,17 @@ const LoginPage = () => {
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                aria-invalid={!!fieldErrors.password}
               />
+              {fieldErrors.password && (
+                <p className="text-xs text-error">{fieldErrors.password}</p>
+              )}
             </div>
-            <Button type="submit" className="w-full">
-              Login
+
+            {error && <p className="text-xs text-error">{error}</p>}
+
+            <Button type="submit" className="w-full" disabled={submitting}>
+              {submitting ? "Logging in..." : "Login"}
             </Button>
           </form>
         </CardContent>
