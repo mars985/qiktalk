@@ -27,9 +27,9 @@ const SignupPage = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [fieldErrors, setFieldErrors] = useState<
-    FieldErrors<RegisterFields>
-  >({});
+  const [fieldErrors, setFieldErrors] = useState<FieldErrors<RegisterFields>>(
+    {},
+  );
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
 

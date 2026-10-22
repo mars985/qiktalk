@@ -18,10 +18,7 @@ export interface EmitEvents {
     callback?: SocketCallback<Conversation>,
   ) => void;
 
-  joinConversation: (
-    conversationId: string, 
-    callback?: SocketCallback
-  ) => void;
+  joinConversation: (conversationId: string, callback?: SocketCallback) => void;
 
   sendMessage: (
     data: { conversationId: string; message: string },

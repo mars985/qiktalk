@@ -90,8 +90,9 @@ const MessagePanel: React.FC<{
         <React.Fragment key={message._id}>
           <div
             data-date={messageDate}
-            className={`message-wrapper flex ${isOwn ? "justify-end" : "justify-start"
-              } ${idx === 0 ? "pb-6" : ""}`} // bottom padding for the very bottom-most (newest) item
+            className={`message-wrapper flex ${
+              isOwn ? "justify-end" : "justify-start"
+            } ${idx === 0 ? "pb-6" : ""}`} // bottom padding for the very bottom-most (newest) item
           >
             <MessageTile message={message} isOwn={isOwn} />
           </div>
