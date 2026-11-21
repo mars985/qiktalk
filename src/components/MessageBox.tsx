@@ -66,6 +66,7 @@ const MessageBox: React.FC<{ conversationId: string | null }> = ({
       <button
         className="btn btn-outline btn-primary"
         disabled={text.trim() ? false : true}
+        onClick={sendMessage}
       >
         Send
       </button>
