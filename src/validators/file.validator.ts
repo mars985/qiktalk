@@ -1,4 +1,8 @@
-import { fileSizeLimit, fileSizeLimitMB, imageMimeTypes } from "@/constants/file.constants";
+import {
+  fileSizeLimit,
+  fileSizeLimitMB,
+  imageMimeTypes,
+} from "@/constants/file.constants";
 
 export const getImageFileError = (file: File) => {
   if (!imageMimeTypes.includes(file.type)) {
