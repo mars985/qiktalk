@@ -6,7 +6,7 @@ const LogoutButton: React.FC = () => {
   const navigate = useNavigate();
   return (
     <button
-      className="btn btn-xs sm:btn-sm md:btn-md"
+      className="btn"
       onClick={async () => {
         try {
           await UserRequest.logout();

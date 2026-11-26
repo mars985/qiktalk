@@ -45,7 +45,7 @@ const NewChatDropdown: React.FC<Props> = ({ onNewChat, onNewGroup }) => {
   return (
     <div className="relative inline-block" ref={containerRef}>
       <button
-        className="btn btn-primary btn-sm gap-1"
+        className="btn btn-primary gap-1"
         onClick={() => (open ? closeAll() : setOpen(true))}
         aria-haspopup="menu"
         aria-expanded={open}

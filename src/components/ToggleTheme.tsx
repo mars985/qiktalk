@@ -62,7 +62,7 @@ const ToggleTheme: React.FC = () => {
 
   return (
     <div className="dropdown">
-      <div tabIndex={0} role="button" className="btn m-1">
+      <div tabIndex={0} role="button" className="btn">
         {theme}
         <svg
           width="12px"
