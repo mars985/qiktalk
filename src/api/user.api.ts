@@ -27,6 +27,17 @@ const verify = async function () {
   return api.get(userRoute("/verify"));
 };
 
+const uploadAvatar = async function (file: File) {
+  const formData = new FormData();
+  formData.append("avatar", file);
+
+  return api.post(userRoute("/uploadAvatar"), formData);
+};
+
+const removeAvatar = async function () {
+  return api.delete(userRoute("/removeAvatar"));
+};
+
 const searchUsernames = async function (searchString: string) {
   return api.get(userRoute("/searchUsernames"), { params: { searchString } });
 };
@@ -40,6 +51,8 @@ export const UserRequest = {
   login,
   logout,
   verify,
+  uploadAvatar,
+  removeAvatar,
   searchUsernames,
   getOnlineStatus,
 };

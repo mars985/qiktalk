@@ -1,4 +1,5 @@
 import ConversationsList from "@/components/ConversationsList";
+import { ImageViewer } from "@/components/ImageViewer";
 import LogoutButton from "@/components/LogoutButton";
 import ToggleTheme from "@/components/ToggleTheme";
 // import SearchBar from "@/components/SearchBar";
@@ -27,13 +28,7 @@ const SideBar: React.FC<{
             height: 120,
           }}
         >
-          <div className="avatar avatar-placeholder scale-150">
-            <div className="bg-secondary text-primary-content rounded-full w-12 flex items-center justify-center">
-              <span className="text-lg font-semibold">
-                {user?.username?.[0]?.toUpperCase() || "U"}
-              </span>
-            </div>
-          </div>
+          {user && <ImageViewer user={user} className="scale-150" />}
         </div>
         <h1 className="text-xl">{user?.username || "Welcome"}</h1>
         <div
