@@ -1,11 +1,11 @@
-import ConversationsList from "@/components/ConversationsList";
-import { ImageViewer } from "@/components/ImageViewer";
-import LogoutButton from "@/components/LogoutButton";
-import ToggleTheme from "@/components/ToggleTheme";
+import ConversationsList from "@/components/sidebar/ConversationsList";
+import { ImageViewer } from "@/components/avatar/ImageViewer";
+import LogoutButton from "@/components/sidebar/LogoutButton";
+import ToggleTheme from "@/components/sidebar/ToggleTheme";
 // import SearchBar from "@/components/SearchBar";
 
 import useUser from "@/hooks/useUser";
-import NewChatDropdown from "./NewChatDropdown";
+import NewChatDropdown from "@/components/new-conversation/NewChatDropdown";
 
 const SideBar: React.FC<{
   setConversationId: React.Dispatch<React.SetStateAction<string | null>>;

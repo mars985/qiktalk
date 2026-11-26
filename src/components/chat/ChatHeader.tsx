@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { ChevronLeft } from "lucide-react";
 
-import { ImageViewer } from "./ImageViewer";
+import { ImageViewer } from "@/components/avatar/ImageViewer";
 
 import useUser from "@/hooks/useUser";
 import usePresence from "@/hooks/usePresence";

@@ -1,5 +1,5 @@
 import React from "react";
-import type { Message } from "../types/message";
+import type { Message } from "@/types/message";
 
 function getTimestampFromObjectId(objectId: string) {
   if (!objectId || objectId.length < 8) return null;

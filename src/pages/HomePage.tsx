@@ -5,8 +5,8 @@ import {
   ResizablePanelGroup,
 } from "../components/ui/resizable";
 
-import MessagePanel from "@/components/MessagePanel";
-import SideBar from "@/components/SideBar";
+import MessagePanel from "@/components/chat/MessagePanel";
+import SideBar from "@/components/sidebar/SideBar";
 
 const HomePage = () => {
   const [conversationId, setConversationId] = useState<string | null>(null);

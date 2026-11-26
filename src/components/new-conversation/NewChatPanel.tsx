@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { ArrowLeft, X } from "lucide-react";
 
-import SearchBar from "./SearchUsers";
+import SearchBar from "./SearchBar";
 import type { User } from "@/types/user";
 import { ConversationRequest } from "@/api/conversation.api";
 

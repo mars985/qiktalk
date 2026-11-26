@@ -1,6 +1,6 @@
 import React from "react";
 import { Users } from "lucide-react"; // group icon
-import ConversationAvatar from "./ConversationAvatar";
+import ConversationAvatar from "@/components/avatar/ConversationAvatar";
 import usePresence from "@/hooks/usePresence";
 
 import type { Conversation } from "@/types/conversation";

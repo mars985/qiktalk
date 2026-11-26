@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { ArrowLeft, X, Users } from "lucide-react";
 
-import SearchBar from "./SearchUsers";
+import SearchBar from "./SearchBar";
 import type { User } from "@/types/user";
 import { conversationEmitters } from "@/socket/conversation.socket";
 

@@ -6,8 +6,8 @@ import { PresenceProvider } from "@/contexts/PresenceContext";
 import SignupPage from "./pages/SignupPage";
 import LoginPage from "./pages/LoginPage";
 import HomePage from "./pages/HomePage";
-import ProtectedRoute from "@/components/ProtectedRoute";
-import PublicRoute from "./components/PublicRoute";
+import ProtectedRoute from "@/pages/guards/ProtectedRoute";
+import PublicRoute from "@/pages/guards/PublicRoute";
 
 export default function App() {
   return (
