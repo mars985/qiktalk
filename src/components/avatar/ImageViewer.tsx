@@ -1,10 +1,10 @@
 import React, { useRef, useState } from "react";
-import * as Avatar from "@radix-ui/react-avatar";
 import axios from "axios";
-import { Folder, Maximize2, Trash2, Users, X } from "lucide-react";
+import { Folder, Maximize2, Trash2, X } from "lucide-react";
 
 import { ConversationRequest } from "@/api/conversation.api";
 import { UserRequest } from "@/api/user.api";
+import Avatar from "@/components/avatar/Avatar";
 import useUser from "@/hooks/useUser";
 import { cn } from "@/lib/utils";
 import type { Conversation } from "@/types/conversation";
@@ -12,41 +12,7 @@ import type { User } from "@/types/user";
 
 const acceptedTypes = "image/jpeg,image/png,image/webp,image/gif";
 
-const AvatarWithFallback: React.FC<{
-  name: string;
-  src?: string | null;
-  isGroup: boolean;
-  className?: string;
-}> = ({ name, src, isGroup, className }) => (
-  <Avatar.Root
-    className={cn(
-      "flex aspect-square shrink-0 items-center justify-center overflow-hidden",
-      className,
-    )}
-  >
-    <Avatar.Image
-      src={src ?? undefined}
-      alt={`${name}'s avatar`}
-      className="size-full object-cover object-center"
-    />
-    <Avatar.Fallback
-      className={cn(
-        "flex size-full items-center justify-center font-semibold select-none",
-        isGroup
-          ? "bg-neutral text-neutral-content"
-          : "bg-secondary text-secondary-content",
-      )}
-    >
-      {isGroup ? (
-        <Users className="size-1/2" aria-hidden="true" />
-      ) : (
-        name.charAt(0).toUpperCase()
-      )}
-    </Avatar.Fallback>
-  </Avatar.Root>
-);
-
-type ImageViewerProps = { className?: string } & (
+type ImageViewerProps = { className?: string; online?: boolean } & (
   | { user: User; group?: never; onGroupAvatarChange?: never }
   | {
       user?: never;
@@ -60,6 +26,7 @@ export const ImageViewer: React.FC<ImageViewerProps> = ({
   group,
   onGroupAvatarChange,
   className,
+  online,
 }) => {
   const { user: loggedInUser, setUser } = useUser();
   const dialogRef = useRef<HTMLDialogElement>(null);
@@ -144,12 +111,7 @@ export const ImageViewer: React.FC<ImageViewerProps> = ({
         )}
         aria-label={`View ${name}'s avatar`}
       >
-        <AvatarWithFallback
-          name={name}
-          src={src}
-          isGroup={isGroup}
-          className="size-12 rounded-full text-lg"
-        />
+        <Avatar name={name} src={src} isGroup={isGroup} online={online} />
         <span className="absolute inset-0 flex items-center justify-center rounded-full bg-neutral/60 text-neutral-content opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-focus-visible:opacity-100">
           <Maximize2 size={16} aria-hidden="true" />
         </span>
@@ -172,11 +134,11 @@ export const ImageViewer: React.FC<ImageViewerProps> = ({
           </div>
 
           <div className="relative overflow-hidden rounded-lg border border-base-300 bg-base-200">
-            <AvatarWithFallback
+            <Avatar
               name={name}
               src={src}
               isGroup={isGroup}
-              className="w-full text-9xl"
+              className="size-auto w-full rounded-none text-9xl"
             />
             {pending && (
               <div

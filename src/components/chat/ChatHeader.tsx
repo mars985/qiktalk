@@ -147,15 +147,7 @@ const ChatHeader: React.FC<{
               }
             />
           ) : partner ? (
-            <div className="relative flex shrink-0">
-              <ImageViewer key={partner._id} user={partner} />
-              <span
-                aria-label={isOnline ? "online" : "offline"}
-                className={`pointer-events-none absolute bottom-0 right-0 h-3 w-3 rounded-full ring-2 ring-base-100 ${
-                  isOnline ? "bg-success" : "bg-base-content/30"
-                }`}
-              />
-            </div>
+            <ImageViewer key={partner._id} user={partner} online={isOnline} />
           ) : null}
           {conversation.type === "group" ? (
             renderGroupHeader()

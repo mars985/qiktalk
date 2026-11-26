@@ -1,6 +1,5 @@
 import React from "react";
-import { Users } from "lucide-react"; // group icon
-import ConversationAvatar from "@/components/avatar/ConversationAvatar";
+import Avatar from "@/components/avatar/Avatar";
 import usePresence from "@/hooks/usePresence";
 
 import type { Conversation } from "@/types/conversation";
@@ -46,17 +45,17 @@ const ConversationTile: React.FC<ConversationTileProps> = ({
       onClick={() => onSelect(conv._id)}
     >
       {conv.type === "dm" ? (
-        <ConversationAvatar otherUsers={otherUsers} online={dmPartnerOnline} />
-      ) : conv.groupAvatar ? (
-        <img
-          src={conv.groupAvatar}
-          alt=""
-          className="size-12 shrink-0 rounded-full object-cover"
+        <Avatar
+          name={otherUsers[0]?.username ?? "?"}
+          src={otherUsers[0]?.avatar}
+          online={dmPartnerOnline}
         />
       ) : (
-        <div className="bg-neutral text-neutral-content w-12 h-12 shrink-0 rounded-full flex items-center justify-center">
-          <Users size={24} />
-        </div>
+        <Avatar
+          name={conv.groupName || "Unnamed Group"}
+          src={conv.groupAvatar}
+          isGroup
+        />
       )}
 
       <div className="flex flex-col overflow-hidden">
