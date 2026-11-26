@@ -5,12 +5,12 @@ import { Folder, Maximize2, Trash2, X } from "lucide-react";
 import { ConversationRequest } from "@/api/conversation.api";
 import { UserRequest } from "@/api/user.api";
 import Avatar from "@/components/avatar/Avatar";
+import { imageMimeTypes } from "@/constants/file.constants";
 import useUser from "@/hooks/useUser";
 import { cn } from "@/lib/utils";
 import type { Conversation } from "@/types/conversation";
 import type { User } from "@/types/user";
-
-const acceptedTypes = "image/jpeg,image/png,image/webp,image/gif";
+import { getImageFileError } from "@/validators/file.validator";
 
 type ImageViewerProps = { className?: string; online?: boolean } & (
   | { user: User; group?: never; onGroupAvatarChange?: never }
@@ -80,6 +80,12 @@ export const ImageViewer: React.FC<ImageViewerProps> = ({
     const file = event.target.files?.[0];
     event.target.value = "";
     if (!file) return;
+
+    const fileError = getImageFileError(file);
+    if (fileError) {
+      setError(fileError);
+      return;
+    }
 
     updateAvatar(async () => {
       const response = group
@@ -183,7 +189,7 @@ export const ImageViewer: React.FC<ImageViewerProps> = ({
               <input
                 ref={inputRef}
                 type="file"
-                accept={acceptedTypes}
+                accept={imageMimeTypes.join(",")}
                 className="hidden"
                 onChange={handleFileChange}
               />
