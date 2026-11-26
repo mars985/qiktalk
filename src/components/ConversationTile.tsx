@@ -36,13 +36,15 @@ const ConversationTile: React.FC<ConversationTileProps> = ({
       onClick={() => onSelect(conv._id)}
     >
       {conv.type === "dm" ? (
-        <ConversationAvatar
-          type="dm"
-          otherUsers={otherUsers}
-          online={dmPartnerOnline}
+        <ConversationAvatar otherUsers={otherUsers} online={dmPartnerOnline} />
+      ) : conv.groupAvatar ? (
+        <img
+          src={conv.groupAvatar}
+          alt=""
+          className="size-12 shrink-0 rounded-full object-cover"
         />
       ) : (
-        <div className="bg-neutral text-neutral-content w-12 h-12 rounded-full flex items-center justify-center">
+        <div className="bg-neutral text-neutral-content w-12 h-12 shrink-0 rounded-full flex items-center justify-center">
           <Users size={24} />
         </div>
       )}

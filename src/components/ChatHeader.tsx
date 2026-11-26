@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { ChevronLeft } from "lucide-react";
 
-import ConversationAvatar from "./ConversationAvatar";
+import { ImageViewer } from "./ImageViewer";
 
 import useUser from "@/hooks/useUser";
 import usePresence from "@/hooks/usePresence";
@@ -11,6 +11,7 @@ import type { PresenceInfo } from "@/contexts/PresenceContext";
 import { UserRequest } from "@/api/user.api";
 import { ConversationRequest } from "@/api/conversation.api";
 import { formatLastSeen } from "@/lib/utils";
+import { useConversationSockets } from "@/socket/useConversationSocket";
 
 const ChatHeader: React.FC<{
   conversationId: string | null;
@@ -76,6 +77,20 @@ const ChatHeader: React.FC<{
       : formatLastSeen(status.lastSeen)
     : "…";
 
+  const handleGroupAvatarChange = (
+    groupId: string,
+    groupAvatar: string | null,
+  ) => {
+    setConversation((prev) =>
+      prev?._id === groupId ? { ...prev, groupAvatar } : prev,
+    );
+  };
+
+  useConversationSockets({
+    onConversationUpdated: ({ conversationId, groupAvatar }) =>
+      handleGroupAvatarChange(conversationId, groupAvatar),
+  });
+
   // Render functions
   const renderGroupHeader = () => (
     <div className="flex flex-col justify-center min-w-0">
@@ -123,11 +138,25 @@ const ChatHeader: React.FC<{
         <span className="text-base-content/60">Loading...</span>
       ) : conversation ? (
         <>
-          <ConversationAvatar
-            type={conversation.type}
-            otherUsers={otherUsers}
-            online={conversation.type === "dm" ? isOnline : undefined}
-          />
+          {conversation.type === "group" ? (
+            <ImageViewer
+              key={conversation._id}
+              group={conversation}
+              onGroupAvatarChange={(groupAvatar) =>
+                handleGroupAvatarChange(conversation._id, groupAvatar)
+              }
+            />
+          ) : partner ? (
+            <div className="relative flex shrink-0">
+              <ImageViewer key={partner._id} user={partner} />
+              <span
+                aria-label={isOnline ? "online" : "offline"}
+                className={`pointer-events-none absolute bottom-0 right-0 h-3 w-3 rounded-full ring-2 ring-base-100 ${
+                  isOnline ? "bg-success" : "bg-base-content/30"
+                }`}
+              />
+            </div>
+          ) : null}
           {conversation.type === "group" ? (
             renderGroupHeader()
           ) : conversation.type === "dm" ? (

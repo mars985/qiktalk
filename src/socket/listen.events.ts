@@ -12,6 +12,11 @@ export interface ListenEvents {
 
   newGroup: (conversation: Conversation) => void;
 
+  conversationUpdated: (data: {
+    conversationId: string;
+    groupAvatar: string | null;
+  }) => void;
+
   "presence:snapshot": (onlineUserIds: string[]) => void;
 
   "presence:update": (update: PresenceUpdate) => void;

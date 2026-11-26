@@ -1,19 +1,23 @@
 import React, { useRef, useState } from "react";
 import * as Avatar from "@radix-ui/react-avatar";
 import axios from "axios";
-import { Folder, Maximize2, Trash2, X } from "lucide-react";
+import { Folder, Maximize2, Trash2, Users, X } from "lucide-react";
 
+import { ConversationRequest } from "@/api/conversation.api";
 import { UserRequest } from "@/api/user.api";
 import useUser from "@/hooks/useUser";
 import { cn } from "@/lib/utils";
+import type { Conversation } from "@/types/conversation";
 import type { User } from "@/types/user";
 
 const acceptedTypes = "image/jpeg,image/png,image/webp,image/gif";
 
 const AvatarWithFallback: React.FC<{
-  user: User;
+  name: string;
+  src?: string | null;
+  isGroup: boolean;
   className?: string;
-}> = ({ user, className }) => (
+}> = ({ name, src, isGroup, className }) => (
   <Avatar.Root
     className={cn(
       "flex aspect-square shrink-0 items-center justify-center overflow-hidden",
@@ -21,23 +25,40 @@ const AvatarWithFallback: React.FC<{
     )}
   >
     <Avatar.Image
-      src={user.avatar ?? undefined}
-      alt={`${user.username}'s avatar`}
+      src={src ?? undefined}
+      alt={`${name}'s avatar`}
       className="size-full object-cover object-center"
     />
-    <Avatar.Fallback className="flex size-full items-center justify-center bg-secondary font-semibold text-secondary-content select-none">
-      {user.username.charAt(0).toUpperCase()}
+    <Avatar.Fallback
+      className={cn(
+        "flex size-full items-center justify-center font-semibold select-none",
+        isGroup
+          ? "bg-neutral text-neutral-content"
+          : "bg-secondary text-secondary-content",
+      )}
+    >
+      {isGroup ? (
+        <Users className="size-1/2" aria-hidden="true" />
+      ) : (
+        name.charAt(0).toUpperCase()
+      )}
     </Avatar.Fallback>
   </Avatar.Root>
 );
 
-interface ImageViewerProps {
-  user: User;
-  className?: string;
-}
+type ImageViewerProps = { className?: string } & (
+  | { user: User; group?: never; onGroupAvatarChange?: never }
+  | {
+      user?: never;
+      group: Conversation;
+      onGroupAvatarChange: (avatar: string | null) => void;
+    }
+);
 
 export const ImageViewer: React.FC<ImageViewerProps> = ({
   user,
+  group,
+  onGroupAvatarChange,
   className,
 }) => {
   const { user: loggedInUser, setUser } = useUser();
@@ -46,8 +67,18 @@ export const ImageViewer: React.FC<ImageViewerProps> = ({
   const [pending, setPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const isOwnAvatar = loggedInUser?._id === user._id;
+  const isOwnAvatar = !!user && loggedInUser?._id === user._id;
   const shownUser = isOwnAvatar && loggedInUser ? loggedInUser : user;
+  const isParticipant = !!group?.participants.some(
+    (participant) => participant._id === loggedInUser?._id,
+  );
+  const canEdit = isOwnAvatar || isParticipant;
+
+  const isGroup = !!group;
+  const name = group
+    ? group.groupName || "Unnamed Group"
+    : (shownUser?.username ?? "");
+  const src = group ? group.groupAvatar : shownUser?.avatar;
 
   const openViewer = () => {
     setError(null);
@@ -63,7 +94,11 @@ export const ImageViewer: React.FC<ImageViewerProps> = ({
 
     try {
       const avatar = await request();
-      setUser((prev) => prev && { ...prev, avatar });
+      if (group) {
+        onGroupAvatarChange(avatar);
+      } else {
+        setUser((prev) => prev && { ...prev, avatar });
+      }
     } catch (err) {
       const serverMessage = axios.isAxiosError(err)
         ? err.response?.data?.message
@@ -80,14 +115,20 @@ export const ImageViewer: React.FC<ImageViewerProps> = ({
     if (!file) return;
 
     updateAvatar(async () => {
-      const response = await UserRequest.uploadAvatar(file);
+      const response = group
+        ? await ConversationRequest.uploadGroupAvatar(group._id, file)
+        : await UserRequest.uploadAvatar(file);
       return response.data.data;
     }, "Failed to upload avatar");
   };
 
   const handleRemove = () => {
     updateAvatar(async () => {
-      await UserRequest.removeAvatar();
+      if (group) {
+        await ConversationRequest.removeGroupAvatar(group._id);
+      } else {
+        await UserRequest.removeAvatar();
+      }
       return null;
     }, "Failed to remove avatar");
   };
@@ -101,10 +142,12 @@ export const ImageViewer: React.FC<ImageViewerProps> = ({
           "group relative cursor-pointer rounded-full ring-2 ring-base-300 ring-offset-2 ring-offset-base-100 transition-shadow duration-200 hover:ring-primary focus-visible:outline-none focus-visible:ring-primary",
           className,
         )}
-        aria-label={`View ${shownUser.username}'s avatar`}
+        aria-label={`View ${name}'s avatar`}
       >
         <AvatarWithFallback
-          user={shownUser}
+          name={name}
+          src={src}
+          isGroup={isGroup}
           className="size-12 rounded-full text-lg"
         />
         <span className="absolute inset-0 flex items-center justify-center rounded-full bg-neutral/60 text-neutral-content opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-focus-visible:opacity-100">
@@ -116,7 +159,7 @@ export const ImageViewer: React.FC<ImageViewerProps> = ({
         <div className="modal-box w-11/12 max-w-[clamp(18rem,calc(100dvh-9rem),32rem)] rounded-xl border border-base-300 bg-base-100 p-3 shadow-xl">
           <div className="mb-3 flex items-center gap-2">
             <h3 className="min-w-0 flex-1 truncate px-1 font-semibold">
-              {shownUser.username}
+              {name}
             </h3>
             <button
               type="button"
@@ -129,7 +172,12 @@ export const ImageViewer: React.FC<ImageViewerProps> = ({
           </div>
 
           <div className="relative overflow-hidden rounded-lg border border-base-300 bg-base-200">
-            <AvatarWithFallback user={shownUser} className="w-full text-9xl" />
+            <AvatarWithFallback
+              name={name}
+              src={src}
+              isGroup={isGroup}
+              className="w-full text-9xl"
+            />
             {pending && (
               <div
                 role="status"
@@ -150,7 +198,7 @@ export const ImageViewer: React.FC<ImageViewerProps> = ({
             </p>
           )}
 
-          {isOwnAvatar && (
+          {canEdit && (
             <div className="mt-3 flex gap-2">
               <button
                 type="button"
@@ -165,7 +213,7 @@ export const ImageViewer: React.FC<ImageViewerProps> = ({
                 type="button"
                 className="btn btn-ghost btn-sm text-[0.8125rem] text-error"
                 onClick={handleRemove}
-                disabled={pending || !shownUser.avatar}
+                disabled={pending || !src}
               >
                 <Trash2 size={16} aria-hidden="true" />
                 Remove

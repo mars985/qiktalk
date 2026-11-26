@@ -18,6 +18,7 @@ const ConversationsList: React.FC<{
   useConversationSockets({
     onNewGroup: fetchConversations,
     onNewMessage: fetchConversations,
+    onConversationUpdated: fetchConversations,
   });
 
   if (user === null) {

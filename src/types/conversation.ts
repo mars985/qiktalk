@@ -7,6 +7,7 @@ type Conversation = {
   participants: User[];
   messages: Message[];
   groupName: string | null;
+  groupAvatar?: string | null;
   updatedAt: string | null;
 };
 

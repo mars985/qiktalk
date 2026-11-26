@@ -35,6 +35,20 @@ const getConversationMessages = async function (conversationId: string) {
   return api.get(conversationRoute(`/${conversationId}/messages`));
 };
 
+const uploadGroupAvatar = async function (conversationId: string, file: File) {
+  const formData = new FormData();
+  formData.append("avatar", file);
+
+  return api.post(
+    conversationRoute(`/${conversationId}/uploadAvatar`),
+    formData,
+  );
+};
+
+const removeGroupAvatar = async function (conversationId: string) {
+  return api.delete(conversationRoute(`/${conversationId}/removeAvatar`));
+};
+
 export const ConversationRequest = {
   getConversations,
   createDM,
@@ -42,4 +56,6 @@ export const ConversationRequest = {
   getConversationById,
   getConversationUsers,
   getConversationMessages,
+  uploadGroupAvatar,
+  removeGroupAvatar,
 };
