@@ -25,6 +25,16 @@ const ConversationTile: React.FC<ConversationTileProps> = ({
       ? (getStatus(otherUsers[0]?._id)?.online ?? false)
       : undefined;
 
+  const senderName =
+    lastMessage?.sender?._id === user._id
+      ? "You"
+      : (lastMessage?.sender?.username ?? "Unknown User");
+  const preview = !lastMessage
+    ? "No messages yet"
+    : conv.type === "group"
+      ? `${senderName}: ${lastMessage.body}`
+      : lastMessage.body;
+
   return (
     <li
       className="
@@ -57,9 +67,7 @@ const ConversationTile: React.FC<ConversationTileProps> = ({
               ? otherUsers.map((p) => p.username).join(", ")
               : "No participants"}
         </div>
-        <div className="text-sm text-base-content/70 truncate">
-          {lastMessage?.body || "No messages yet"}
-        </div>
+        <div className="text-sm text-base-content/70 truncate">{preview}</div>
       </div>
     </li>
   );

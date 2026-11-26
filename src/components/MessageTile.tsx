@@ -47,9 +47,11 @@ const MessageTile: React.FC<{ message: Message; isOwn: boolean }> = ({
 
       {/* Message body + timestamp */}
       <div className="flex items-end gap-1">
-        <span className="text-base">{message.body}</span>
+        <span className="min-w-0 text-base">{message.body}</span>
         {timeString && (
-          <span className="text-[10px] text-base-content/60">{timeString}</span>
+          <span className="shrink-0 whitespace-nowrap text-[10px] text-base-content/60">
+            {timeString}
+          </span>
         )}
       </div>
     </div>
