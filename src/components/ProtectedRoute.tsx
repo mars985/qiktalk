@@ -11,16 +11,17 @@ const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const { user, setUser } = useUser();
+  const userId = user?._id;
 
   useEffect(() => {
-    if (!user) return;
+    if (!userId) return;
 
     socket.connect();
 
     return () => {
       socket.disconnect();
     };
-  }, [user]);
+  }, [userId]);
 
   useEffect(() => {
     UserRequest.verify()
