@@ -1,139 +1,145 @@
 # QikTalk — Frontend
 
-The web client for **QikTalk**, a real-time one-to-one and group chat app. Built with
-**React 19 + TypeScript + Vite**, styled with **Tailwind CSS v4 + DaisyUI** (with a few
-**shadcn/ui** components for auth), and talking to the backend over **REST (axios)** and
-**Socket.IO**.
+Web client for **QikTalk**, a real-time chat app with direct messages, group chats, live presence
+and avatars.
 
-> Backend lives in the [`qiktalk-backend`](https://github.com/mars985/qiktalk-backend) repo.
+Built with **React 19**, **TypeScript**, **Vite 7**, **Tailwind CSS v4** and **DaisyUI 5**. It talks
+to the backend over **REST (axios)** and **Socket.IO**.
 
----
+> The API and socket server live in [`qiktalk-backend`](https://github.com/mars985/qiktalk-backend).
 
 ## Features
 
-- **Auth** — login / signup against the backend; an httpOnly JWT cookie keeps the session.
-- **Conversations** — direct messages and named groups, with a polished **New chat / New group**
-  flow (search users, build a group, name it).
-- **Real-time messaging** — messages stream in live over Socket.IO; the conversation list reorders
-  as new messages arrive.
-- **Live presence** — online status updates **in real time**. A green dot and an
-  `Online` / `last seen…` label reflect presence as it changes, in both the chat header and the
-  conversation list.
-- **Theming** — DaisyUI themes via a theme switcher (persisted to `localStorage`).
-- **Responsive** — a resizable two-pane desktop layout and a stacked mobile layout with back nav.
-
----
+- **Auth:** sign up and log in. The session is an httpOnly cookie set by the backend, and route guards keep signed-out users on the auth pages.
+- **DMs and groups:** a "New chat / New group" flow lets you search users, pick group members and name the group.
+- **Real-time messaging:** messages arrive live, the conversation list reorders on activity, and group previews show the sender's name.
+- **Live presence:** green dots and `Online` / `last seen…` labels update in real time in the chat header and the conversation list.
+- **Avatars:** upload, view and remove your own avatar or a group's. Group avatar changes appear for every member live.
+- **Themes:** a DaisyUI theme switcher whose choice persists in `localStorage`.
+- **Responsive layout:** a resizable two-pane layout on desktop and a stacked layout with back navigation on mobile.
 
 ## Tech stack
 
-| Concern    | Choice                                       |
-| ---------- | -------------------------------------------- |
-| Framework  | React 19                                     |
-| Build tool | Vite 7                                       |
-| Language   | TypeScript (strict)                          |
-| Styling    | Tailwind CSS v4, DaisyUI 5, shadcn/ui (auth) |
-| Icons      | lucide-react                                 |
-| Routing    | react-router-dom 7                           |
-| HTTP       | axios                                        |
-| Realtime   | socket.io-client                             |
-
----
+| Concern    | Choice                                        |
+| ---------- | --------------------------------------------- |
+| Framework  | React 19                                      |
+| Language   | TypeScript (strict)                           |
+| Build      | Vite 7                                        |
+| Styling    | Tailwind CSS v4, DaisyUI 5, shadcn/ui (Radix) |
+| Routing    | react-router-dom 7                            |
+| HTTP       | axios                                         |
+| Realtime   | socket.io-client 4 (typed events)             |
+| Validation | Zod 4                                         |
+| Icons      | lucide-react                                  |
 
 ## Project structure
 
 ```
-qiktalk/src/
-├── main.tsx                # App bootstrap (Router)
-├── App.tsx                 # Routes + providers
-├── pages/
-│   ├── LoginPage.tsx
-│   ├── SignupPage.tsx
-│   └── HomePage.tsx        # Desktop (resizable) / mobile layouts
+src/
+├── main.tsx, App.tsx       Bootstrap, routes and providers
+├── pages/                  LoginPage, SignupPage, HomePage
+│   └── guards/             ProtectedRoute, PublicRoute
 ├── components/
-│   ├── SideBar.tsx
-│   ├── ConversationsList.tsx · ConversationTile.tsx · ConversationAvatar.tsx
-│   ├── NewChatDropdown.tsx · NewChatPanel.tsx · NewGroupPanel.tsx · SearchUsers.tsx
-│   ├── MessagePanel.tsx · MessageTile.tsx · MessageBox.tsx · ChatHeader.tsx · DateDivider.tsx
-│   ├── ProtectedRoute.tsx · LogoutButton.tsx · ToggleTheme.tsx
-│   └── ui/                 # shadcn/ui primitives (button, card, input, label, ...)
-├── contexts/
-│   ├── UserContext.tsx     # Current user
-│   └── PresenceContext.tsx # Live online/last-seen map from socket events
-├── hooks/
-│   ├── useUser.ts
-│   ├── usePresence.ts
-│   └── useConversations.ts
-├── lib/
-│   ├── axios.ts            # axios instance (baseURL, withCredentials)
-│   ├── socket.ts           # socket.io-client singleton (withCredentials)
-│   └── utils.ts            # cn(), ObjectId timestamp helpers
-└── types/                  # user / conversation / message types
+│   ├── sidebar/            SideBar, ConversationsList, ConversationTile, ToggleTheme, LogoutButton
+│   ├── chat/               ChatHeader, MessagePanel, MessageTile, MessageBox, DateDivider
+│   ├── new-conversation/   NewChatDropdown, NewChatPanel, NewGroupPanel, SearchBar
+│   ├── avatar/             Avatar, ImageViewer (view/upload/remove)
+│   └── ui/                 shadcn/ui primitives
+├── api/                    REST wrappers (user.api.ts, conversation.api.ts)
+├── socket/                 Typed emit/listen event maps and socket hooks
+├── contexts/               UserContext, PresenceContext
+├── hooks/                  useUser, usePresence, useConversations
+├── lib/                    axios instance, socket singleton, utils
+├── validators/, constants/ Zod schemas and limits shared with the backend
+└── types/                  User, Conversation, Message
 ```
 
----
+The `@/` import alias points to `src/`.
 
 ## Getting started
 
 ### Prerequisites
 
-The [backend](../qiktalk-backend) should be running and reachable, with its `CORS_ORIGIN`
-set to this app's dev origin (default `http://localhost:5173`).
+- Node.js 20+
+- The [backend](https://github.com/mars985/qiktalk-backend) running, with `CORS_ORIGIN` set to this
+  app's origin (`http://localhost:5173` in development)
 
-### 1. Install dependencies
+### Setup
 
 ```bash
 npm install
-```
-
-### 2. Configure environment
-
-```bash
 cp .env.example .env
+npm run dev
 ```
 
-| Variable           | Description                                                       | Example                 |
-| ------------------ | ----------------------------------------------------------------- | ----------------------- |
-| `VITE_BACKEND_URL` | Base URL of the backend (REST + Socket.IO). Used by axios/socket. | `http://localhost:4501` |
+| Variable           | Description                                       | Example                 |
+| ------------------ | ------------------------------------------------- | ----------------------- |
+| `VITE_BACKEND_URL` | Backend origin, used for both REST and Socket.IO. | `http://localhost:4501` |
 
-### 3. Run
+axios appends `/api/v1` to this URL itself, so leave the prefix out.
 
-```bash
-npm run dev       # start the Vite dev server
-npm run build     # type-check (tsc -b) + production build
-npm run preview   # preview the production build
-npm run lint      # run ESLint
-```
+### Scripts
 
-The dev server runs at `http://localhost:5173` by default.
+| Command           | Description                                 |
+| ----------------- | ------------------------------------------- |
+| `npm run dev`     | Start the Vite dev server on port 5173.     |
+| `npm run build`   | Type-check (`tsc -b`) and build to `dist/`. |
+| `npm run preview` | Serve the production build locally.         |
+| `npm run lint`    | Run ESLint.                                 |
 
----
+## How it talks to the backend
 
-## How it connects to the backend
+### REST
 
-- **`lib/axios.ts`** — an axios instance pointed at `VITE_BACKEND_URL` with `withCredentials: true`
-  so the JWT cookie travels with every request.
-- **`lib/socket.ts`** — a single `socket.io-client` instance (`autoConnect: false`,
-  `withCredentials: true`). `ProtectedRoute` calls `socket.connect()` once the user is known and
-  `socket.disconnect()` on unmount. The backend derives identity from the authenticated handshake,
-  so the client doesn't announce itself.
+`lib/axios.ts` creates an axios instance with `baseURL = VITE_BACKEND_URL + "/api/v1"` and
+`withCredentials: true`, so the auth cookie goes with every request. Endpoints are wrapped in
+`api/user.api.ts` (`UserRequest`) and `api/conversation.api.ts` (`ConversationRequest`).
 
-### Real-time presence
+### Socket.IO
 
-`PresenceContext` listens to the backend's presence events and keeps a live map of who's online:
+`lib/socket.ts` exports one typed `Socket<ListenEvents, EmitEvents>` with `autoConnect: false` and
+`withCredentials: true`. `ProtectedRoute` connects it once the user is verified and disconnects it on
+unmount. The backend reads the user from the authenticated handshake, so the client never sends its own ID.
 
-- on mount it emits `presence:request` and applies the returned `presence:snapshot` (the current
-  online roster);
-- it applies each `presence:update` (`{ userId, online, lastSeen }`) as users come and go.
+Event types are declared in `socket/emit.events.ts` and `socket/listen.events.ts`, so emits, acks and
+listeners are all checked by TypeScript. Components subscribe through `useSocketEvent`, which keeps
+the latest handler in a ref and re-subscribes only when the event name changes.
 
-`ChatHeader` seeds a DM partner's status once via `GET /getOnlineStatus/:userId` (so a freshly
-opened chat is correct immediately) and then lets live socket updates take over. The same context
-drives the green presence dots in the conversation list. This replaces the previous approach, which
-fetched status only once and never updated.
+| Direction       | Events                                                                                  |
+| --------------- | --------------------------------------------------------------------------------------- |
+| Client → server | `sendMessage`, `createDM`, `createGroup`, `joinConversation`, `presence:request`        |
+| Server → client | `newMessage`, `newGroup`, `conversationUpdated`, `presence:snapshot`, `presence:update` |
 
----
+### Presence
+
+`PresenceContext` keeps a live map of who is online:
+
+1. On mount it emits `presence:request` and loads the returned `presence:snapshot`.
+2. It then applies every `presence:update` (`{ userId, online, lastSeen }`).
+
+`ChatHeader` loads a DM partner's status once with `GET /users/getOnlineStatus/:userId` and lets live
+updates take over from there. The same context drives the presence dots in the conversation list.
+
+### Avatars
+
+`ImageViewer` opens an avatar full-size and, for your own avatar or a group's, lets you upload or remove
+it. Files are checked on the client (JPEG/PNG/WebP/GIF, up to 5 MB) before they are sent as
+`multipart/form-data`. Group changes reach other members through the `conversationUpdated` event.
+
+## Deployment
+
+The app is a static SPA. `vercel.json` rewrites every path to `/`, so client-side routes survive a
+page refresh on Vercel. On other hosts, set up an equivalent fallback to `index.html`.
+
+In production, `VITE_BACKEND_URL` must be the deployed backend's HTTPS origin. The backend's
+`CORS_ORIGIN` must match the frontend's origin, and the auth cookie is `secure` with `SameSite=None`.
+
+## CI
+
+`.github/workflows/ci.yml` runs on pull requests and pushes to `main`: `npm ci`,
+`prettier --check .`, `npm run lint` and `npm run build`.
 
 ## Notes
 
-- The chat UI uses **DaisyUI theme tokens** (`base-*`, `primary`, `secondary`, `success`, …) so it
-  adapts across all DaisyUI themes offered by the theme switcher.
-- `index.html` defaults to the `light` theme; the selected theme is saved to `localStorage`.
+- In development, requests send `ngrok-skip-browser-warning`, and Vite allows `*.ngrok-free.app` hosts, so the dev server can be shared over ngrok.
+- Validation limits in `src/constants/` mirror the backend's and must be kept in sync.
